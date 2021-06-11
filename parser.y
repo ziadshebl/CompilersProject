@@ -1188,22 +1188,6 @@ void yyerror(char *s) {
 }
 
 #define LEN 256
-<<<<<<< HEAD
-void addText (std::string myTxt)
-{
-   FILE * fp;
-   /* open the file for writing*/
-   fp = fopen ("./output.txt","wt");
-
-   /* write 10 lines of text into the file stream*/
-   fprintf(fp, "%s\n", myTxt);
-
-   /* close the file*/  
-   fclose (fp);
-}
-
-=======
->>>>>>> 617a0ec88d30797abdd80785a57a655c123610f7
 void appendLineToFile(std::string line)
 {
     std::ofstream file;
