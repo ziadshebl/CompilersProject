@@ -1,18 +1,11 @@
-Foo:
-mov r0 , a
-mov r1 , b
-mov r2 , c
-push 0
-pop R0
-pop R1
-push R0
-push R1
-ret 
 Main:
-push 1
-pop r0
-push 1
-pop r1
-push "Ahmed"
-pop r2
-call Foo
+push 0
+pop i
+L0: 
+push 0
+pop y
+push i
+push 0
+cmpLT 
+JNZ L0
+L1: 

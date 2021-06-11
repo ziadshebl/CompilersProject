@@ -27,9 +27,23 @@ bool isClosedBracketScope = false;
 bool isForScope = false;
 bool isSwitchScope = false;
 bool notInitialized = false;
+int startLabel=0;
+int endLabel = 1;
 int paramList [5];
 int paramListIndex = 0;
 int argumentList [5];
+typedef enum   {whileLabel,doLabel, forLabel, ifLabel}  labelType;
+void createLabel(labelType type);
+void deleteLabel();
+struct label{
+        labelType type;
+        int labelsNames[4];
+};
+struct lablesController {
+        int currentIndex = -1;
+        label * labelBlocks[100];      
+};
+lablesController labels;
 int argumentListIndex = 0;
 int labelNumber = 0;
 dataTypeEnum functionDataType; 
@@ -307,8 +321,42 @@ stmt:
         | returnStmt                          { }
         | switchStmt                          { }
         ;
-ifStmt: IF '(' expr ')' stmt %prec IFX        {/*TODO:CHECK BOOL EXPRESSION*/}
-        | IF '(' expr ')' stmt ELSE stmt      {/*TODO:CHECK BOOL EXPRESSION*/}
+
+ifStmt: IF '(' expr ')'                         {       
+                                                        createLabel(labelType::ifLabel);
+                                                        std::string temp = "JE L";
+                                                        temp+= to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
+                                                        appendLineToFile(temp);
+                                                        temp = "JMP L";
+                                                        temp+= to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
+                                                        appendLineToFile(temp);
+                                                        temp = "L";
+                                                        temp+= to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
+                                                        temp+=':';
+                                                        appendLineToFile(temp);  
+                                                }
+        stmt ifContinue                         {
+                                                        deleteLabel();
+                                                }
+        ;
+ifContinue: 
+        %prec IFX         {
+                                                        /*TODO:CHECK BOOL EXPRESSION*/
+                                                        std::string temp = "L";
+                                                        temp+= to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
+                                                        temp+=':';
+                                                        appendLineToFile(temp);
+                                                }
+        |
+        ELSE            {
+                                                        /*TODO:CHECK BOOL EXPRESSION*/
+                                                        std::string temp = "L";
+                                                        temp+= to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
+                                                        temp+=':';
+                                                        appendLineToFile(temp);
+                                                } 
+        stmt      {/*TODO:CHECK BOOL EXPRESSION*/}
+
         ;
 returnStmt:
         RETURN expr ';'                         {
@@ -346,6 +394,10 @@ breakStmt:
                                                                
                                                                 appendErrorToFile("Break couldn't be called outside the scope of a loop/switch at line "+ to_string(yylineno)); 
                                                                         
+                                                        }else{
+                                                                std::string temp = "JMP L";
+                                                                temp+= to_string(endLabel);
+                                                                appendLineToFile(temp);
                                                         }
                                                 }
         ;
@@ -354,6 +406,10 @@ continueStmt:
                                                         if(!isForScope){
                                                                 appendErrorToFile("Continue couldn't be called outside the scope of a loop/switch at line "+ to_string(yylineno)); 
                                                                 
+                                                        }else{
+                                                                std::string temp = "JMP L";
+                                                                temp+= to_string(startLabel);
+                                                                appendLineToFile(temp);
                                                         }
                                                 }
         ;
@@ -381,97 +437,132 @@ caseStmt:
         | DEFAULT ':' stmtList          {}
         ;
 whileStmt: WHILE '('                                            {    
+                                                                        createLabel(labelType::whileLabel);
                                                                         currentScope = createNewScope();
                                                                         isBracketScope = true;
                                                                         std::string stringToAdd = "L";
-                                                                        stringToAdd += to_string(labelNumber);
+                                                                        stringToAdd += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
+                                                                        startLabel = labelNumber;
                                                                         stringToAdd += ": ";
                                                                         appendLineToFile(stringToAdd);  
-                                                                        labelNumber++;          
-                                                                        
                                                                 }
            expr ')' openScope                                   {
                                                                         isForScope = true;
                                                                         isBracketScope = false;
                                                                         std::string stringToAdd = "JZ ";
                                                                         stringToAdd += "L";
-                                                                        stringToAdd += to_string(labelNumber);
+                                                                        stringToAdd += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
                                                                         appendLineToFile(stringToAdd);
                                                                               
                                                                 }
            stmtList closeScope                                  {
-                                                                         isForScope = false;
                                                                         std::string stringToAdd = "JMP ";
                                                                         stringToAdd += "L";
-                                                                        stringToAdd += to_string(labelNumber-1);
+                                                                        stringToAdd += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
                                                                         appendLineToFile(stringToAdd);
                                                                         stringToAdd = "L";
-                                                                        stringToAdd += to_string(labelNumber);
+                                                                        stringToAdd += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
                                                                         stringToAdd += ": ";
                                                                         appendLineToFile(stringToAdd);  
-                                                                        labelNumber++;      
+                                                                        deleteLabel();
+                                                                              
                                                                 }
         ;
 
 forStmt:  FOR '('                                               {       
-                                                                       
+                                                                        createLabel(labelType::forLabel);
+                                                                        printf("Ana Hena");
                                                                         currentScope = createNewScope();
                                                                         isBracketScope = true;
                                                                          
                                                                         
                                                                 }
           loopExpression ')' openScope                          {
+                                                                
+                                                                        std::string temp ="L"+ to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[2]);
+                                                                        temp+=":";
+                                                                        appendLineToFile(temp); 
                                                                         isForScope = true;
                                                                         isBracketScope = false;   
-                                                                
+                                                                        endLabel = labelNumber;
                                                                 }
           stmtList closeScope                                   {       
-                                                                        isForScope = false;
-                                                                        std::string stringToAdd = "JMP L";
-                                                                        stringToAdd += to_string(labelNumber);
-                                                                        appendLineToFile(stringToAdd);  
+                                                                        
+                                                                        std::string stringToAdd = "JMP ";
+                                                                        stringToAdd +="L"+to_string( labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
+                                                                        appendLineToFile(stringToAdd);
+                                                                        std::string temp = "L"+to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[3]);
+                                                                        temp+=":";
+                                                                        appendLineToFile(temp);   
+                                                                        deleteLabel();
                                                                 }
         ;
 doStmt: 
-        DO openScope                                            {       
+        DO openScope                                            {       createLabel(labelType::doLabel);
                                                                         isClosedBracketScope = true;
                                                                         isForScope = true;
+                                                                        startLabel = labelNumber;
                                                                         std::string stringToAdd = "L";
-                                                                        stringToAdd += to_string(labelNumber);
+                                                                        stringToAdd += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
                                                                         stringToAdd += ": ";
-                                                                        appendLineToFile(stringToAdd);  
-                                                                        labelNumber++;          
+                                                                        appendLineToFile(stringToAdd);            
                                                                 }
         stmtList closeScope                                     {
                                                                         isClosedBracketScope = false;        
-                                                                        isForScope = false;
+                                                                        
                                                                 }
         WHILE '(' expr ')' ';'                                  {      
                                                                         std::string stringToAdd = "JNZ ";
                                                                         stringToAdd += "L";
-                                                                        stringToAdd += to_string(labelNumber-1);
+                                                                        stringToAdd += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
                                                                         appendLineToFile(stringToAdd);  
 
                                                                         stringToAdd = "L";
-                                                                        stringToAdd += to_string(labelNumber);
+                                                                        stringToAdd += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
                                                                         stringToAdd += ": ";
                                                                         appendLineToFile(stringToAdd);  
-                                                                        labelNumber++;          
+                                                                        deleteLabel();          
                                                                 }
         ;
 loopExpression: 
         INT VARIDENTIFIER               {
                                                 $2 = insert(symbolTableList[currentScope].symbolTable,yylval.stringValue,dataTypeEnum::typeInt);
                                                 $2->isInitialized = true;
+                                                
+                                                
+                                       }
+        '=' expr                        {
                                                 std::string stringToAdd = "pop ";
                                                 stringToAdd += $2->lexeme;
                                                 appendLineToFile(stringToAdd); 
-                                                stringToAdd = "JMP L";
-                                                stringToAdd += to_string(labelNumber+1);
-                                                appendLineToFile(stringToAdd);  
+                                                // stringToAdd = "JMP L";
+                                                // stringToAdd += to_string(labelNumber+1);
+                                                // appendLineToFile(stringToAdd); 
+                                                std::string temp = "L"+to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
+                                                temp+=":";
+                                                appendLineToFile(temp);  
+
+                                        }
+        ';' expr                        {
                                                 
-                                       }
-        '=' expr ';' expr ';' expr      
+                                                std::string stringToAdd = "JE ";
+                                                stringToAdd +="L"+ to_string( labels.labelBlocks[labels.currentIndex]->labelsNames[2]);
+                                                appendLineToFile(stringToAdd); 
+                                                stringToAdd = "JMP ";
+                                                stringToAdd +="L"+ to_string( labels.labelBlocks[labels.currentIndex]->labelsNames[3]);
+                                                appendLineToFile(stringToAdd); 
+                                                std::string temp = "L"+to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
+                                                temp+=":";
+                                                appendLineToFile(temp);  
+                                                
+                                        } 
+
+        ';' expr                        {
+                                                std::string stringToAdd = "JMP ";
+                                                stringToAdd += "L"+to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
+                                                appendLineToFile(stringToAdd);
+                                                
+                                        }
         |  VARIDENTIFIER                {
                                                 $1 = isAvailable(yylval.stringValue);
                                                 if($1==NULL){
@@ -1201,7 +1292,44 @@ void appendErrorToFile(std::string line)
     file.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/error.txt", std::ios::out | std::ios::app );
     file << line << std::endl;
 }
+void createLabel(labelType type){
+        labels.currentIndex++;
+        labels.labelBlocks[labels.currentIndex] =  (label*) malloc(sizeof(label));
+        labels.labelBlocks[labels.currentIndex]->type = type;
+        
+        if(type == labelType::forLabel){
 
+                for(int i =0; i< 4;i++){
+                        
+                        labels.labelBlocks[labels.currentIndex]->labelsNames[i] = labelNumber; 
+                        labelNumber++;
+                }
+        }else if(type == labelType::ifLabel){
+                for(int i =0; i< 2;i++){
+                        labels.labelBlocks[labels.currentIndex]->labelsNames[i] = labelNumber; 
+                        labelNumber++;
+                }
+        }else if(type == labelType::whileLabel){
+                for(int i =0; i< 2;i++){
+                        labels.labelBlocks[labels.currentIndex]->labelsNames[i] = labelNumber; 
+                        labelNumber++; 
+                }
+        }else{
+                for(int i =0; i< 2;i++){
+                        labels.labelBlocks[labels.currentIndex]->labelsNames[i] = labelNumber; 
+                        labelNumber++; 
+                }
+        }
+}
+
+void deleteLabel(){
+        free(labels.labelBlocks[labels.currentIndex]);
+        labels.labelBlocks[labels.currentIndex] = NULL;
+        labels.currentIndex--;
+        if(labels.currentIndex==-1)
+                isForScope = false;
+        
+}
 int main (int argc, char *argv[]){
 	// parsing
         std::ofstream file1;

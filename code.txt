@@ -1,7 +1,8 @@
-void func Foo(int a, bool b, string c){
-  return 0;
-}
-void func Main()
-{
-  Foo(1,true,"Ahmed");
+
+void func Main(){
+  int i =0;
+  do{
+    int y = 0;
+
+  }while(i<0);
 }

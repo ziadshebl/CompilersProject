@@ -77,158 +77,169 @@ Grammar
    44     | returnStmt
    45     | switchStmt
 
-   46 ifStmt: IF '(' expr ')' stmt
-   47       | IF '(' expr ')' stmt ELSE stmt
+   46 $@11: /* empty */
 
-   48 returnStmt: RETURN expr ';'
-   49           | RETURN ';'
+   47 ifStmt: IF '(' expr ')' $@11 stmt ifContinue
 
-   50 breakStmt: BREAK ';'
+   48 ifContinue: /* empty */
 
-   51 continueStmt: CONTINUE ';'
+   49 $@12: /* empty */
 
-   52 $@11: /* empty */
+   50 ifContinue: ELSE $@12 stmt
 
-   53 switchStmt: SWITCH '(' expr ')' openScope $@11 caseStmts closeScope
+   51 returnStmt: RETURN expr ';'
+   52           | RETURN ';'
 
-   54 caseStmts: caseStmt caseStmts
-   55          | caseStmt
+   53 breakStmt: BREAK ';'
 
-   56 caseStmt: CASE expr ':' stmtList
-   57         | DEFAULT ':' stmtList
+   54 continueStmt: CONTINUE ';'
 
-   58 $@12: /* empty */
+   55 $@13: /* empty */
 
-   59 $@13: /* empty */
+   56 switchStmt: SWITCH '(' expr ')' openScope $@13 caseStmts closeScope
 
-   60 whileStmt: WHILE '(' $@12 expr ')' openScope $@13 stmtList closeScope
+   57 caseStmts: caseStmt caseStmts
+   58          | caseStmt
+
+   59 caseStmt: CASE expr ':' stmtList
+   60         | DEFAULT ':' stmtList
 
    61 $@14: /* empty */
 
    62 $@15: /* empty */
 
-   63 forStmt: FOR '(' $@14 loopExpression ')' openScope $@15 stmtList closeScope
+   63 whileStmt: WHILE '(' $@14 expr ')' openScope $@15 stmtList closeScope
 
    64 $@16: /* empty */
 
    65 $@17: /* empty */
 
-   66 doStmt: DO openScope $@16 stmtList closeScope $@17 WHILE '(' expr ')' ';'
+   66 forStmt: FOR '(' $@16 loopExpression ')' openScope $@17 stmtList closeScope
 
    67 $@18: /* empty */
 
-   68 loopExpression: INT VARIDENTIFIER $@18 '=' expr ';' expr ';' expr
+   68 $@19: /* empty */
 
-   69 $@19: /* empty */
+   69 doStmt: DO openScope $@18 stmtList closeScope $@19 WHILE '(' expr ')' ';'
 
-   70 loopExpression: VARIDENTIFIER $@19 '=' expr ';' expr ';' expr
+   70 $@20: /* empty */
 
-   71 stmtList: stmt
-   72         | stmtList stmt
+   71 $@21: /* empty */
 
-   73 expr: lValue '=' expr
-   74     | lValue
-   75     | consValues
-   76     | '-' expr
+   72 $@22: /* empty */
 
-   77 $@20: /* empty */
+   73 loopExpression: INT VARIDENTIFIER $@20 '=' expr $@21 ';' expr $@22 ';' expr
 
-   78 expr: FUNCIDENTIFIER $@20 '(' functionArgs ')'
-   79     | expr '+' expr
-   80     | expr '-' expr
-   81     | expr '*' expr
-   82     | expr '/' expr
-   83     | expr '<' expr
-   84     | expr '>' expr
-   85     | expr '%' expr
-   86     | expr OR expr
-   87     | expr AND expr
-   88     | NOT expr
-   89     | lValue INCASSIGNMENT expr
-   90     | lValue DECASSIGNMENT expr
-   91     | lValue DIVIDEASSIGNMENT expr
-   92     | lValue MULTIPLYASSIGNMENT expr
-   93     | lValue INC
-   94     | INC lValue
-   95     | lValue DEC
-   96     | DEC lValue
-   97     | expr GE expr
-   98     | expr LE expr
-   99     | expr NE expr
-  100     | expr EQ expr
-  101     | '(' expr ')'
+   74 $@23: /* empty */
 
-  102 lValue: VARIDENTIFIER
+   75 loopExpression: VARIDENTIFIER $@23 '=' expr ';' expr ';' expr
 
-  103 consValues: INTEGER
-  104           | STRING
-  105           | FALSEBOOL
-  106           | TRUEBOOL
+   76 stmtList: stmt
+   77         | stmtList stmt
 
-  107 openScope: '{'
+   78 expr: lValue '=' expr
+   79     | lValue
+   80     | consValues
+   81     | '-' expr
 
-  108 closeScope: '}'
+   82 $@24: /* empty */
+
+   83 expr: FUNCIDENTIFIER $@24 '(' functionArgs ')'
+   84     | expr '+' expr
+   85     | expr '-' expr
+   86     | expr '*' expr
+   87     | expr '/' expr
+   88     | expr '<' expr
+   89     | expr '>' expr
+   90     | expr '%' expr
+   91     | expr OR expr
+   92     | expr AND expr
+   93     | NOT expr
+   94     | lValue INCASSIGNMENT expr
+   95     | lValue DECASSIGNMENT expr
+   96     | lValue DIVIDEASSIGNMENT expr
+   97     | lValue MULTIPLYASSIGNMENT expr
+   98     | lValue INC
+   99     | INC lValue
+  100     | lValue DEC
+  101     | DEC lValue
+  102     | expr GE expr
+  103     | expr LE expr
+  104     | expr NE expr
+  105     | expr EQ expr
+  106     | '(' expr ')'
+
+  107 lValue: VARIDENTIFIER
+
+  108 consValues: INTEGER
+  109           | STRING
+  110           | FALSEBOOL
+  111           | TRUEBOOL
+
+  112 openScope: '{'
+
+  113 closeScope: '}'
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'%' (37) 85
-'(' (40) 25 30 34 46 47 53 60 63 66 78 101
-')' (41) 25 30 34 46 47 53 60 63 66 78 101
-'*' (42) 81
-'+' (43) 79
+'%' (37) 90
+'(' (40) 25 30 34 47 56 63 66 69 83 106
+')' (41) 25 30 34 47 56 63 66 69 83 106
+'*' (42) 86
+'+' (43) 84
 ',' (44) 11 15
-'-' (45) 76 80
-'/' (47) 82
-':' (58) 56 57
-';' (59) 17 18 19 32 33 34 48 49 50 51 66 68 70
-'<' (60) 83
-'=' (61) 18 19 68 70 73
-'>' (62) 84
-'{' (123) 107
-'}' (125) 108
+'-' (45) 81 85
+'/' (47) 87
+':' (58) 59 60
+';' (59) 17 18 19 32 33 34 51 52 53 54 69 73 75
+'<' (60) 88
+'=' (61) 18 19 73 75 78
+'>' (62) 89
+'{' (123) 112
+'}' (125) 113
 error (256)
-STRING (258) 104
-INTEGER (259) 103
-VARIDENTIFIER (260) 20 68 70 102
-TRUEBOOL (261) 106
-FALSEBOOL (262) 105
-INT (263) 6 68
+STRING (258) 109
+INTEGER (259) 108
+VARIDENTIFIER (260) 20 73 75 107
+TRUEBOOL (261) 111
+FALSEBOOL (262) 110
+INT (263) 6 73
 STR (264) 7
 BOOL (265) 8
 VOID (266) 30
-SWITCH (267) 53
-CASE (268) 56
-DEFAULT (269) 57
+SWITCH (267) 56
+CASE (268) 59
+DEFAULT (269) 60
 CONST (270) 19
-DO (271) 66
+DO (271) 69
 NIL (272)
-OR (273) 86
-AND (274) 87
-NOT (275) 88
+OR (273) 91
+AND (274) 92
+NOT (275) 93
 FUNCTION (276) 25 30
-RETURN (277) 48 49
-INC (278) 93 94
-DEC (279) 95 96
-INCASSIGNMENT (280) 89
-DECASSIGNMENT (281) 90
-MULTIPLYASSIGNMENT (282) 92
-DIVIDEASSIGNMENT (283) 91
-FUNCIDENTIFIER (284) 25 30 78
-WHILE (285) 60 66
-IF (286) 46 47
+RETURN (277) 51 52
+INC (278) 98 99
+DEC (279) 100 101
+INCASSIGNMENT (280) 94
+DECASSIGNMENT (281) 95
+MULTIPLYASSIGNMENT (282) 97
+DIVIDEASSIGNMENT (283) 96
+FUNCIDENTIFIER (284) 25 30 83
+WHILE (285) 63 69
+IF (286) 47
 PRINT (287) 34
-FOR (288) 63
-CONTINUE (289) 51
-BREAK (290) 50
+FOR (288) 66
+CONTINUE (289) 54
+BREAK (290) 53
 VARFX (291)
 IFX (292)
-ELSE (293) 47
-NE (294) 99
-EQ (295) 100
-LE (296) 98
-GE (297) 97
+ELSE (293) 50
+NE (294) 104
+EQ (295) 105
+LE (296) 103
+GE (297) 102
 UMINUS (298)
 
 
@@ -247,7 +258,7 @@ functionParam (63)
 $@1 (64)
     on left: 10, on right: 11
 functionArgs (65)
-    on left: 13 15 16, on right: 15 78
+    on left: 13 15 16, on right: 15 83
 $@2 (66)
     on left: 14, on right: 15
 varDeclaration (67)
@@ -277,65 +288,75 @@ $@10 (78)
 stmtBlock (79)
     on left: 31, on right: 41
 stmt (80)
-    on left: 32 33 34 35 36 37 38 39 40 41 42 43 44 45, on right: 46
-    47 71 72
+    on left: 32 33 34 35 36 37 38 39 40 41 42 43 44 45, on right: 47
+    50 76 77
 ifStmt (81)
-    on left: 46 47, on right: 40
-returnStmt (82)
-    on left: 48 49, on right: 44
-breakStmt (83)
-    on left: 50, on right: 39
-continueStmt (84)
-    on left: 51, on right: 38
-switchStmt (85)
-    on left: 53, on right: 45
-$@11 (86)
-    on left: 52, on right: 53
-caseStmts (87)
-    on left: 54 55, on right: 53 54
-caseStmt (88)
-    on left: 56 57, on right: 54 55
-whileStmt (89)
-    on left: 60, on right: 35
-$@12 (90)
-    on left: 58, on right: 60
-$@13 (91)
-    on left: 59, on right: 60
-forStmt (92)
-    on left: 63, on right: 37
+    on left: 47, on right: 40
+$@11 (82)
+    on left: 46, on right: 47
+ifContinue (83)
+    on left: 48 50, on right: 47
+$@12 (84)
+    on left: 49, on right: 50
+returnStmt (85)
+    on left: 51 52, on right: 44
+breakStmt (86)
+    on left: 53, on right: 39
+continueStmt (87)
+    on left: 54, on right: 38
+switchStmt (88)
+    on left: 56, on right: 45
+$@13 (89)
+    on left: 55, on right: 56
+caseStmts (90)
+    on left: 57 58, on right: 56 57
+caseStmt (91)
+    on left: 59 60, on right: 57 58
+whileStmt (92)
+    on left: 63, on right: 35
 $@14 (93)
     on left: 61, on right: 63
 $@15 (94)
     on left: 62, on right: 63
-doStmt (95)
-    on left: 66, on right: 36
+forStmt (95)
+    on left: 66, on right: 37
 $@16 (96)
     on left: 64, on right: 66
 $@17 (97)
     on left: 65, on right: 66
-loopExpression (98)
-    on left: 68 70, on right: 63
+doStmt (98)
+    on left: 69, on right: 36
 $@18 (99)
-    on left: 67, on right: 68
+    on left: 67, on right: 69
 $@19 (100)
-    on left: 69, on right: 70
-stmtList (101)
-    on left: 71 72, on right: 25 30 31 56 57 60 63 66 72
-expr (102)
-    on left: 73 74 75 76 78 79 80 81 82 83 84 85 86 87 88 89 90 91
-    92 93 94 95 96 97 98 99 100 101, on right: 13 15 18 19 33 34 46
-    47 48 53 56 60 66 68 70 73 76 79 80 81 82 83 84 85 86 87 88 89
-    90 91 92 97 98 99 100 101
-$@20 (103)
-    on left: 77, on right: 78
-lValue (104)
-    on left: 102, on right: 73 74 89 90 91 92 93 94 95 96
-consValues (105)
-    on left: 103 104 105 106, on right: 75
-openScope (106)
-    on left: 107, on right: 25 30 31 53 60 63 66
-closeScope (107)
-    on left: 108, on right: 25 30 31 53 60 63 66
+    on left: 68, on right: 69
+loopExpression (101)
+    on left: 73 75, on right: 66
+$@20 (102)
+    on left: 70, on right: 73
+$@21 (103)
+    on left: 71, on right: 73
+$@22 (104)
+    on left: 72, on right: 73
+$@23 (105)
+    on left: 74, on right: 75
+stmtList (106)
+    on left: 76 77, on right: 25 30 31 59 60 63 66 69 77
+expr (107)
+    on left: 78 79 80 81 83 84 85 86 87 88 89 90 91 92 93 94 95 96
+    97 98 99 100 101 102 103 104 105 106, on right: 13 15 18 19 33
+    34 47 51 56 59 63 69 73 75 78 81 84 85 86 87 88 89 90 91 92 93
+    94 95 96 97 102 103 104 105 106
+$@24 (108)
+    on left: 82, on right: 83
+lValue (109)
+    on left: 107, on right: 78 79 94 95 96 97 98 99 100 101
+consValues (110)
+    on left: 108 109 110 111, on right: 80
+openScope (111)
+    on left: 112, on right: 25 30 31 56 63 66 69
+closeScope (112)
+    on left: 113, on right: 25 30 31 56 63 66 69
 
 
 state 0
@@ -567,42 +588,42 @@ state 23
 
 state 24
 
-  104 consValues: STRING .
+  109 consValues: STRING .
 
-    $default  reduce using rule 104 (consValues)
+    $default  reduce using rule 109 (consValues)
 
 
 state 25
 
-  103 consValues: INTEGER .
+  108 consValues: INTEGER .
 
-    $default  reduce using rule 103 (consValues)
+    $default  reduce using rule 108 (consValues)
 
 
 state 26
 
-  102 lValue: VARIDENTIFIER .
+  107 lValue: VARIDENTIFIER .
 
-    $default  reduce using rule 102 (lValue)
+    $default  reduce using rule 107 (lValue)
 
 
 state 27
 
-  106 consValues: TRUEBOOL .
+  111 consValues: TRUEBOOL .
 
-    $default  reduce using rule 106 (consValues)
+    $default  reduce using rule 111 (consValues)
 
 
 state 28
 
-  105 consValues: FALSEBOOL .
+  110 consValues: FALSEBOOL .
 
-    $default  reduce using rule 105 (consValues)
+    $default  reduce using rule 110 (consValues)
 
 
 state 29
 
-   88 expr: NOT . expr
+   93 expr: NOT . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -623,7 +644,7 @@ state 29
 
 state 30
 
-   94 expr: INC . lValue
+   99 expr: INC . lValue
 
     VARIDENTIFIER  shift, and go to state 26
 
@@ -632,7 +653,7 @@ state 30
 
 state 31
 
-   96 expr: DEC . lValue
+  101 expr: DEC . lValue
 
     VARIDENTIFIER  shift, and go to state 26
 
@@ -641,16 +662,16 @@ state 31
 
 state 32
 
-   78 expr: FUNCIDENTIFIER . $@20 '(' functionArgs ')'
+   83 expr: FUNCIDENTIFIER . $@24 '(' functionArgs ')'
 
-    $default  reduce using rule 77 ($@20)
+    $default  reduce using rule 82 ($@24)
 
-    $@20  go to state 44
+    $@24  go to state 44
 
 
 state 33
 
-   76 expr: '-' . expr
+   81 expr: '-' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -671,7 +692,7 @@ state 33
 
 state 34
 
-  101 expr: '(' . expr ')'
+  106 expr: '(' . expr ')'
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -693,19 +714,19 @@ state 34
 state 35
 
    18 varDeclaration: variable '=' expr . ';'
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -725,14 +746,14 @@ state 35
 
 state 36
 
-   73 expr: lValue . '=' expr
-   74     | lValue .
-   89     | lValue . INCASSIGNMENT expr
-   90     | lValue . DECASSIGNMENT expr
-   91     | lValue . DIVIDEASSIGNMENT expr
-   92     | lValue . MULTIPLYASSIGNMENT expr
-   93     | lValue . INC
-   95     | lValue . DEC
+   78 expr: lValue . '=' expr
+   79     | lValue .
+   94     | lValue . INCASSIGNMENT expr
+   95     | lValue . DECASSIGNMENT expr
+   96     | lValue . DIVIDEASSIGNMENT expr
+   97     | lValue . MULTIPLYASSIGNMENT expr
+   98     | lValue . INC
+  100     | lValue . DEC
 
     INC                 shift, and go to state 61
     DEC                 shift, and go to state 62
@@ -742,14 +763,14 @@ state 36
     DIVIDEASSIGNMENT    shift, and go to state 66
     '='                 shift, and go to state 67
 
-    $default  reduce using rule 74 (expr)
+    $default  reduce using rule 79 (expr)
 
 
 state 37
 
-   75 expr: consValues .
+   80 expr: consValues .
 
-    $default  reduce using rule 75 (expr)
+    $default  reduce using rule 80 (expr)
 
 
 state 38
@@ -762,19 +783,19 @@ state 38
 state 39
 
    19 constDeclaration: CONST variable '=' expr . ';'
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -801,81 +822,81 @@ state 40
 
 state 41
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   88     | NOT expr .
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+   93     | NOT expr .
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
-    $default  reduce using rule 88 (expr)
+    $default  reduce using rule 93 (expr)
 
 
 state 42
 
-   94 expr: INC lValue .
+   99 expr: INC lValue .
 
-    $default  reduce using rule 94 (expr)
+    $default  reduce using rule 99 (expr)
 
 
 state 43
 
-   96 expr: DEC lValue .
+  101 expr: DEC lValue .
 
-    $default  reduce using rule 96 (expr)
+    $default  reduce using rule 101 (expr)
 
 
 state 44
 
-   78 expr: FUNCIDENTIFIER $@20 . '(' functionArgs ')'
+   83 expr: FUNCIDENTIFIER $@24 . '(' functionArgs ')'
 
     '('  shift, and go to state 71
 
 
 state 45
 
-   76 expr: '-' expr .
-   79     | expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   81 expr: '-' expr .
+   84     | expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
-    $default  reduce using rule 76 (expr)
+    $default  reduce using rule 81 (expr)
 
 
 state 46
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-  101     | '(' expr . ')'
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+  106     | '(' expr . ')'
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -895,7 +916,7 @@ state 46
 
 state 47
 
-   86 expr: expr OR . expr
+   91 expr: expr OR . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -916,7 +937,7 @@ state 47
 
 state 48
 
-   87 expr: expr AND . expr
+   92 expr: expr AND . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -944,7 +965,7 @@ state 49
 
 state 50
 
-   84 expr: expr '>' . expr
+   89 expr: expr '>' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -965,7 +986,7 @@ state 50
 
 state 51
 
-   83 expr: expr '<' . expr
+   88 expr: expr '<' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -986,7 +1007,7 @@ state 51
 
 state 52
 
-   99 expr: expr NE . expr
+  104 expr: expr NE . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1007,7 +1028,7 @@ state 52
 
 state 53
 
-  100 expr: expr EQ . expr
+  105 expr: expr EQ . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1028,7 +1049,7 @@ state 53
 
 state 54
 
-   98 expr: expr LE . expr
+  103 expr: expr LE . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1049,7 +1070,7 @@ state 54
 
 state 55
 
-   97 expr: expr GE . expr
+  102 expr: expr GE . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1070,7 +1091,7 @@ state 55
 
 state 56
 
-   79 expr: expr '+' . expr
+   84 expr: expr '+' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1091,7 +1112,7 @@ state 56
 
 state 57
 
-   80 expr: expr '-' . expr
+   85 expr: expr '-' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1112,7 +1133,7 @@ state 57
 
 state 58
 
-   81 expr: expr '*' . expr
+   86 expr: expr '*' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1133,7 +1154,7 @@ state 58
 
 state 59
 
-   82 expr: expr '/' . expr
+   87 expr: expr '/' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1154,7 +1175,7 @@ state 59
 
 state 60
 
-   85 expr: expr '%' . expr
+   90 expr: expr '%' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1175,21 +1196,21 @@ state 60
 
 state 61
 
-   93 expr: lValue INC .
+   98 expr: lValue INC .
 
-    $default  reduce using rule 93 (expr)
+    $default  reduce using rule 98 (expr)
 
 
 state 62
 
-   95 expr: lValue DEC .
+  100 expr: lValue DEC .
 
-    $default  reduce using rule 95 (expr)
+    $default  reduce using rule 100 (expr)
 
 
 state 63
 
-   89 expr: lValue INCASSIGNMENT . expr
+   94 expr: lValue INCASSIGNMENT . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1210,7 +1231,7 @@ state 63
 
 state 64
 
-   90 expr: lValue DECASSIGNMENT . expr
+   95 expr: lValue DECASSIGNMENT . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1231,7 +1252,7 @@ state 64
 
 state 65
 
-   92 expr: lValue MULTIPLYASSIGNMENT . expr
+   97 expr: lValue MULTIPLYASSIGNMENT . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1252,7 +1273,7 @@ state 65
 
 state 66
 
-   91 expr: lValue DIVIDEASSIGNMENT . expr
+   96 expr: lValue DIVIDEASSIGNMENT . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1273,7 +1294,7 @@ state 66
 
 state 67
 
-   73 expr: lValue '=' . expr
+   78 expr: lValue '=' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1319,7 +1340,7 @@ state 70
 
 state 71
 
-   78 expr: FUNCIDENTIFIER $@20 '(' . functionArgs ')'
+   83 expr: FUNCIDENTIFIER $@24 '(' . functionArgs ')'
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -1343,27 +1364,27 @@ state 71
 
 state 72
 
-  101 expr: '(' expr ')' .
+  106 expr: '(' expr ')' .
 
-    $default  reduce using rule 101 (expr)
+    $default  reduce using rule 106 (expr)
 
 
 state 73
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   86     | expr OR expr .
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   91     | expr OR expr .
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     '+'  shift, and go to state 56
     '-'  shift, and go to state 57
@@ -1371,25 +1392,25 @@ state 73
     '/'  shift, and go to state 59
     '%'  shift, and go to state 60
 
-    $default  reduce using rule 86 (expr)
+    $default  reduce using rule 91 (expr)
 
 
 state 74
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   87     | expr AND expr .
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+   92     | expr AND expr .
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     '+'  shift, and go to state 56
     '-'  shift, and go to state 57
@@ -1397,28 +1418,182 @@ state 74
     '/'  shift, and go to state 59
     '%'  shift, and go to state 60
 
-    $default  reduce using rule 87 (expr)
+    $default  reduce using rule 92 (expr)
 
 
 state 75
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   84     | expr '>' expr .
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   89     | expr '>' expr .
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     '+'  shift, and go to state 56
     '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+    $default  reduce using rule 89 (expr)
+
+
+state 76
+
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   88     | expr '<' expr .
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+    $default  reduce using rule 88 (expr)
+
+
+state 77
+
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  104     | expr NE expr .
+  105     | expr . EQ expr
+
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+    $default  reduce using rule 104 (expr)
+
+
+state 78
+
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+  105     | expr EQ expr .
+
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+    $default  reduce using rule 105 (expr)
+
+
+state 79
+
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  103     | expr LE expr .
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+    $default  reduce using rule 103 (expr)
+
+
+state 80
+
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  102     | expr GE expr .
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+    $default  reduce using rule 102 (expr)
+
+
+state 81
+
+   84 expr: expr . '+' expr
+   84     | expr '+' expr .
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
     '*'  shift, and go to state 58
     '/'  shift, and go to state 59
     '%'  shift, and go to state 60
@@ -1426,340 +1601,186 @@ state 75
     $default  reduce using rule 84 (expr)
 
 
-state 76
-
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   83     | expr '<' expr .
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 83 (expr)
-
-
-state 77
-
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-   99     | expr NE expr .
-  100     | expr . EQ expr
-
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 99 (expr)
-
-
-state 78
-
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-  100     | expr EQ expr .
-
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 100 (expr)
-
-
-state 79
-
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   98     | expr LE expr .
-   99     | expr . NE expr
-  100     | expr . EQ expr
-
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 98 (expr)
-
-
-state 80
-
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   97     | expr GE expr .
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 97 (expr)
-
-
-state 81
-
-   79 expr: expr . '+' expr
-   79     | expr '+' expr .
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 79 (expr)
-
-
 state 82
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   80     | expr '-' expr .
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   85     | expr '-' expr .
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     '*'  shift, and go to state 58
     '/'  shift, and go to state 59
     '%'  shift, and go to state 60
-
-    $default  reduce using rule 80 (expr)
-
-
-state 83
-
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   81     | expr '*' expr .
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-
-    $default  reduce using rule 81 (expr)
-
-
-state 84
-
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   82     | expr '/' expr .
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-
-    $default  reduce using rule 82 (expr)
-
-
-state 85
-
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   85     | expr '%' expr .
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
 
     $default  reduce using rule 85 (expr)
 
 
-state 86
+state 83
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   89     | lValue INCASSIGNMENT expr .
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   86     | expr '*' expr .
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
-    $default  reduce using rule 89 (expr)
+    $default  reduce using rule 86 (expr)
 
 
-state 87
+state 84
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   90     | lValue DECASSIGNMENT expr .
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   87     | expr '/' expr .
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    $default  reduce using rule 87 (expr)
+
+
+state 85
+
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   90     | expr '%' expr .
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     $default  reduce using rule 90 (expr)
 
 
+state 86
+
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+   94     | lValue INCASSIGNMENT expr .
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    $default  reduce using rule 94 (expr)
+
+
+state 87
+
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+   95     | lValue DECASSIGNMENT expr .
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    $default  reduce using rule 95 (expr)
+
+
 state 88
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   92     | lValue MULTIPLYASSIGNMENT expr .
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+   97     | lValue MULTIPLYASSIGNMENT expr .
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
-    $default  reduce using rule 92 (expr)
+    $default  reduce using rule 97 (expr)
 
 
 state 89
 
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   91     | lValue DIVIDEASSIGNMENT expr .
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+   96     | lValue DIVIDEASSIGNMENT expr .
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
-    $default  reduce using rule 91 (expr)
+    $default  reduce using rule 96 (expr)
 
 
 state 90
 
-   73 expr: lValue '=' expr .
-   79     | expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   78 expr: lValue '=' expr .
+   84     | expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -1775,7 +1796,7 @@ state 90
     '/'  shift, and go to state 59
     '%'  shift, and go to state 60
 
-    $default  reduce using rule 73 (expr)
+    $default  reduce using rule 78 (expr)
 
 
 state 91
@@ -1810,7 +1831,7 @@ state 92
 
 state 93
 
-   78 expr: FUNCIDENTIFIER $@20 '(' functionArgs . ')'
+   83 expr: FUNCIDENTIFIER $@24 '(' functionArgs . ')'
 
     ')'  shift, and go to state 98
 
@@ -1819,19 +1840,19 @@ state 94
 
    13 functionArgs: expr .
    15             | expr . $@2 ',' functionArgs
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -1880,9 +1901,9 @@ state 97
 
 state 98
 
-   78 expr: FUNCIDENTIFIER $@20 '(' functionArgs ')' .
+   83 expr: FUNCIDENTIFIER $@24 '(' functionArgs ')' .
 
-    $default  reduce using rule 78 (expr)
+    $default  reduce using rule 83 (expr)
 
 
 state 99
@@ -1983,9 +2004,9 @@ state 107
 
 state 108
 
-  107 openScope: '{' .
+  112 openScope: '{' .
 
-    $default  reduce using rule 107 (openScope)
+    $default  reduce using rule 112 (openScope)
 
 
 state 109
@@ -2119,14 +2140,14 @@ state 113
 
 state 114
 
-   53 switchStmt: SWITCH . '(' expr ')' openScope $@11 caseStmts closeScope
+   56 switchStmt: SWITCH . '(' expr ')' openScope $@13 caseStmts closeScope
 
     '('  shift, and go to state 140
 
 
 state 115
 
-   66 doStmt: DO . openScope $@16 stmtList closeScope $@17 WHILE '(' expr ')' ';'
+   69 doStmt: DO . openScope $@18 stmtList closeScope $@19 WHILE '(' expr ')' ';'
 
     '{'  shift, and go to state 108
 
@@ -2135,8 +2156,8 @@ state 115
 
 state 116
 
-   48 returnStmt: RETURN . expr ';'
-   49           | RETURN . ';'
+   51 returnStmt: RETURN . expr ';'
+   52           | RETURN . ';'
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -2158,15 +2179,14 @@ state 116
 
 state 117
 
-   60 whileStmt: WHILE . '(' $@12 expr ')' openScope $@13 stmtList closeScope
+   63 whileStmt: WHILE . '(' $@14 expr ')' openScope $@15 stmtList closeScope
 
     '('  shift, and go to state 144
 
 
 state 118
 
-   46 ifStmt: IF . '(' expr ')' stmt
-   47       | IF . '(' expr ')' stmt ELSE stmt
+   47 ifStmt: IF . '(' expr ')' $@11 stmt ifContinue
 
     '('  shift, and go to state 145
 
@@ -2180,21 +2200,21 @@ state 119
 
 state 120
 
-   63 forStmt: FOR . '(' $@14 loopExpression ')' openScope $@15 stmtList closeScope
+   66 forStmt: FOR . '(' $@16 loopExpression ')' openScope $@17 stmtList closeScope
 
     '('  shift, and go to state 147
 
 
 state 121
 
-   51 continueStmt: CONTINUE . ';'
+   54 continueStmt: CONTINUE . ';'
 
     ';'  shift, and go to state 148
 
 
 state 122
 
-   50 breakStmt: BREAK . ';'
+   53 breakStmt: BREAK . ';'
 
     ';'  shift, and go to state 149
 
@@ -2229,9 +2249,9 @@ state 126
 
 state 127
 
-   71 stmtList: stmt .
+   76 stmtList: stmt .
 
-    $default  reduce using rule 71 (stmtList)
+    $default  reduce using rule 76 (stmtList)
 
 
 state 128
@@ -2293,7 +2313,7 @@ state 135
 state 136
 
    30 functionDeclaration: VOID FUNCTION FUNCIDENTIFIER $@7 '(' $@8 functionParam ')' $@9 openScope $@10 stmtList . closeScope
-   72 stmtList: stmtList . stmt
+   77 stmtList: stmtList . stmt
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -2347,19 +2367,19 @@ state 136
 state 137
 
    33 stmt: expr . ';'
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -2432,7 +2452,7 @@ state 138
 state 139
 
    25 functionDeclaration: type FUNCTION FUNCIDENTIFIER $@3 '(' $@4 functionParam ')' $@5 openScope $@6 stmtList . closeScope
-   72 stmtList: stmtList . stmt
+   77 stmtList: stmtList . stmt
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -2485,7 +2505,7 @@ state 139
 
 state 140
 
-   53 switchStmt: SWITCH '(' . expr ')' openScope $@11 caseStmts closeScope
+   56 switchStmt: SWITCH '(' . expr ')' openScope $@13 caseStmts closeScope
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -2506,36 +2526,36 @@ state 140
 
 state 141
 
-   66 doStmt: DO openScope . $@16 stmtList closeScope $@17 WHILE '(' expr ')' ';'
+   69 doStmt: DO openScope . $@18 stmtList closeScope $@19 WHILE '(' expr ')' ';'
 
-    $default  reduce using rule 64 ($@16)
+    $default  reduce using rule 67 ($@18)
 
-    $@16  go to state 157
+    $@18  go to state 157
 
 
 state 142
 
-   49 returnStmt: RETURN ';' .
+   52 returnStmt: RETURN ';' .
 
-    $default  reduce using rule 49 (returnStmt)
+    $default  reduce using rule 52 (returnStmt)
 
 
 state 143
 
-   48 returnStmt: RETURN expr . ';'
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   51 returnStmt: RETURN expr . ';'
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -2555,17 +2575,16 @@ state 143
 
 state 144
 
-   60 whileStmt: WHILE '(' . $@12 expr ')' openScope $@13 stmtList closeScope
+   63 whileStmt: WHILE '(' . $@14 expr ')' openScope $@15 stmtList closeScope
 
-    $default  reduce using rule 58 ($@12)
+    $default  reduce using rule 61 ($@14)
 
-    $@12  go to state 159
+    $@14  go to state 159
 
 
 state 145
 
-   46 ifStmt: IF '(' . expr ')' stmt
-   47       | IF '(' . expr ')' stmt ELSE stmt
+   47 ifStmt: IF '(' . expr ')' $@11 stmt ifContinue
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -2607,39 +2626,39 @@ state 146
 
 state 147
 
-   63 forStmt: FOR '(' . $@14 loopExpression ')' openScope $@15 stmtList closeScope
+   66 forStmt: FOR '(' . $@16 loopExpression ')' openScope $@17 stmtList closeScope
 
-    $default  reduce using rule 61 ($@14)
+    $default  reduce using rule 64 ($@16)
 
-    $@14  go to state 162
+    $@16  go to state 162
 
 
 state 148
 
-   51 continueStmt: CONTINUE ';' .
+   54 continueStmt: CONTINUE ';' .
 
-    $default  reduce using rule 51 (continueStmt)
+    $default  reduce using rule 54 (continueStmt)
 
 
 state 149
 
-   50 breakStmt: BREAK ';' .
+   53 breakStmt: BREAK ';' .
 
-    $default  reduce using rule 50 (breakStmt)
+    $default  reduce using rule 53 (breakStmt)
 
 
 state 150
 
-  108 closeScope: '}' .
+  113 closeScope: '}' .
 
-    $default  reduce using rule 108 (closeScope)
+    $default  reduce using rule 113 (closeScope)
 
 
 state 151
 
-   72 stmtList: stmtList stmt .
+   77 stmtList: stmtList stmt .
 
-    $default  reduce using rule 72 (stmtList)
+    $default  reduce using rule 77 (stmtList)
 
 
 state 152
@@ -2659,7 +2678,7 @@ state 153
 state 154
 
    31 stmtBlock: openScope stmtList . closeScope
-   72 stmtList: stmtList . stmt
+   77 stmtList: stmtList . stmt
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -2719,20 +2738,20 @@ state 155
 
 state 156
 
-   53 switchStmt: SWITCH '(' expr . ')' openScope $@11 caseStmts closeScope
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   56 switchStmt: SWITCH '(' expr . ')' openScope $@13 caseStmts closeScope
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -2752,7 +2771,7 @@ state 156
 
 state 157
 
-   66 doStmt: DO openScope $@16 . stmtList closeScope $@17 WHILE '(' expr ')' ';'
+   69 doStmt: DO openScope $@18 . stmtList closeScope $@19 WHILE '(' expr ')' ';'
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -2804,14 +2823,14 @@ state 157
 
 state 158
 
-   48 returnStmt: RETURN expr ';' .
+   51 returnStmt: RETURN expr ';' .
 
-    $default  reduce using rule 48 (returnStmt)
+    $default  reduce using rule 51 (returnStmt)
 
 
 state 159
 
-   60 whileStmt: WHILE '(' $@12 . expr ')' openScope $@13 stmtList closeScope
+   63 whileStmt: WHILE '(' $@14 . expr ')' openScope $@15 stmtList closeScope
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -2832,21 +2851,20 @@ state 159
 
 state 160
 
-   46 ifStmt: IF '(' expr . ')' stmt
-   47       | IF '(' expr . ')' stmt ELSE stmt
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   47 ifStmt: IF '(' expr . ')' $@11 stmt ifContinue
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -2867,19 +2885,19 @@ state 160
 state 161
 
    34 stmt: PRINT '(' expr . ')' ';'
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -2899,7 +2917,7 @@ state 161
 
 state 162
 
-   63 forStmt: FOR '(' $@14 . loopExpression ')' openScope $@15 stmtList closeScope
+   66 forStmt: FOR '(' $@16 . loopExpression ')' openScope $@17 stmtList closeScope
 
     VARIDENTIFIER  shift, and go to state 169
     INT            shift, and go to state 170
@@ -2916,7 +2934,7 @@ state 163
 
 state 164
 
-   53 switchStmt: SWITCH '(' expr ')' . openScope $@11 caseStmts closeScope
+   56 switchStmt: SWITCH '(' expr ')' . openScope $@13 caseStmts closeScope
 
     '{'  shift, and go to state 108
 
@@ -2925,8 +2943,8 @@ state 164
 
 state 165
 
-   66 doStmt: DO openScope $@16 stmtList . closeScope $@17 WHILE '(' expr ')' ';'
-   72 stmtList: stmtList . stmt
+   69 doStmt: DO openScope $@18 stmtList . closeScope $@19 WHILE '(' expr ')' ';'
+   77 stmtList: stmtList . stmt
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -2979,20 +2997,20 @@ state 165
 
 state 166
 
-   60 whileStmt: WHILE '(' $@12 expr . ')' openScope $@13 stmtList closeScope
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   63 whileStmt: WHILE '(' $@14 expr . ')' openScope $@15 stmtList closeScope
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -3012,54 +3030,11 @@ state 166
 
 state 167
 
-   46 ifStmt: IF '(' expr ')' . stmt
-   47       | IF '(' expr ')' . stmt ELSE stmt
+   47 ifStmt: IF '(' expr ')' . $@11 stmt ifContinue
 
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    INT             shift, and go to state 4
-    STR             shift, and go to state 5
-    BOOL            shift, and go to state 6
-    SWITCH          shift, and go to state 114
-    CONST           shift, and go to state 8
-    DO              shift, and go to state 115
-    NOT             shift, and go to state 29
-    RETURN          shift, and go to state 116
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    WHILE           shift, and go to state 117
-    IF              shift, and go to state 118
-    PRINT           shift, and go to state 119
-    FOR             shift, and go to state 120
-    CONTINUE        shift, and go to state 121
-    BREAK           shift, and go to state 122
-    ';'             shift, and go to state 123
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-    '{'             shift, and go to state 108
+    $default  reduce using rule 46 ($@11)
 
-    type              go to state 15
-    varDeclaration    go to state 124
-    constDeclaration  go to state 125
-    variable          go to state 12
-    stmtBlock         go to state 126
-    stmt              go to state 175
-    ifStmt            go to state 128
-    returnStmt        go to state 129
-    breakStmt         go to state 130
-    continueStmt      go to state 131
-    switchStmt        go to state 132
-    whileStmt         go to state 133
-    forStmt           go to state 134
-    doStmt            go to state 135
-    expr              go to state 137
-    lValue            go to state 36
-    consValues        go to state 37
-    openScope         go to state 138
+    $@11  go to state 175
 
 
 state 168
@@ -3071,48 +3046,48 @@ state 168
 
 state 169
 
-   70 loopExpression: VARIDENTIFIER . $@19 '=' expr ';' expr ';' expr
+   75 loopExpression: VARIDENTIFIER . $@23 '=' expr ';' expr ';' expr
 
-    $default  reduce using rule 69 ($@19)
+    $default  reduce using rule 74 ($@23)
 
-    $@19  go to state 177
+    $@23  go to state 177
 
 
 state 170
 
-   68 loopExpression: INT . VARIDENTIFIER $@18 '=' expr ';' expr ';' expr
+   73 loopExpression: INT . VARIDENTIFIER $@20 '=' expr $@21 ';' expr $@22 ';' expr
 
     VARIDENTIFIER  shift, and go to state 178
 
 
 state 171
 
-   63 forStmt: FOR '(' $@14 loopExpression . ')' openScope $@15 stmtList closeScope
+   66 forStmt: FOR '(' $@16 loopExpression . ')' openScope $@17 stmtList closeScope
 
     ')'  shift, and go to state 179
 
 
 state 172
 
-   53 switchStmt: SWITCH '(' expr ')' openScope . $@11 caseStmts closeScope
+   56 switchStmt: SWITCH '(' expr ')' openScope . $@13 caseStmts closeScope
 
-    $default  reduce using rule 52 ($@11)
+    $default  reduce using rule 55 ($@13)
 
-    $@11  go to state 180
+    $@13  go to state 180
 
 
 state 173
 
-   66 doStmt: DO openScope $@16 stmtList closeScope . $@17 WHILE '(' expr ')' ';'
+   69 doStmt: DO openScope $@18 stmtList closeScope . $@19 WHILE '(' expr ')' ';'
 
-    $default  reduce using rule 65 ($@17)
+    $default  reduce using rule 68 ($@19)
 
-    $@17  go to state 181
+    $@19  go to state 181
 
 
 state 174
 
-   60 whileStmt: WHILE '(' $@12 expr ')' . openScope $@13 stmtList closeScope
+   63 whileStmt: WHILE '(' $@14 expr ')' . openScope $@15 stmtList closeScope
 
     '{'  shift, and go to state 108
 
@@ -3121,12 +3096,53 @@ state 174
 
 state 175
 
-   46 ifStmt: IF '(' expr ')' stmt .
-   47       | IF '(' expr ')' stmt . ELSE stmt
+   47 ifStmt: IF '(' expr ')' $@11 . stmt ifContinue
 
-    ELSE  shift, and go to state 183
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    INT             shift, and go to state 4
+    STR             shift, and go to state 5
+    BOOL            shift, and go to state 6
+    SWITCH          shift, and go to state 114
+    CONST           shift, and go to state 8
+    DO              shift, and go to state 115
+    NOT             shift, and go to state 29
+    RETURN          shift, and go to state 116
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    WHILE           shift, and go to state 117
+    IF              shift, and go to state 118
+    PRINT           shift, and go to state 119
+    FOR             shift, and go to state 120
+    CONTINUE        shift, and go to state 121
+    BREAK           shift, and go to state 122
+    ';'             shift, and go to state 123
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+    '{'             shift, and go to state 108
 
-    $default  reduce using rule 46 (ifStmt)
+    type              go to state 15
+    varDeclaration    go to state 124
+    constDeclaration  go to state 125
+    variable          go to state 12
+    stmtBlock         go to state 126
+    stmt              go to state 183
+    ifStmt            go to state 128
+    returnStmt        go to state 129
+    breakStmt         go to state 130
+    continueStmt      go to state 131
+    switchStmt        go to state 132
+    whileStmt         go to state 133
+    forStmt           go to state 134
+    doStmt            go to state 135
+    expr              go to state 137
+    lValue            go to state 36
+    consValues        go to state 37
+    openScope         go to state 138
 
 
 state 176
@@ -3138,23 +3154,23 @@ state 176
 
 state 177
 
-   70 loopExpression: VARIDENTIFIER $@19 . '=' expr ';' expr ';' expr
+   75 loopExpression: VARIDENTIFIER $@23 . '=' expr ';' expr ';' expr
 
     '='  shift, and go to state 184
 
 
 state 178
 
-   68 loopExpression: INT VARIDENTIFIER . $@18 '=' expr ';' expr ';' expr
+   73 loopExpression: INT VARIDENTIFIER . $@20 '=' expr $@21 ';' expr $@22 ';' expr
 
-    $default  reduce using rule 67 ($@18)
+    $default  reduce using rule 70 ($@20)
 
-    $@18  go to state 185
+    $@20  go to state 185
 
 
 state 179
 
-   63 forStmt: FOR '(' $@14 loopExpression ')' . openScope $@15 stmtList closeScope
+   66 forStmt: FOR '(' $@16 loopExpression ')' . openScope $@17 stmtList closeScope
 
     '{'  shift, and go to state 108
 
@@ -3163,7 +3179,7 @@ state 179
 
 state 180
 
-   53 switchStmt: SWITCH '(' expr ')' openScope $@11 . caseStmts closeScope
+   56 switchStmt: SWITCH '(' expr ')' openScope $@13 . caseStmts closeScope
 
     CASE     shift, and go to state 187
     DEFAULT  shift, and go to state 188
@@ -3174,74 +3190,34 @@ state 180
 
 state 181
 
-   66 doStmt: DO openScope $@16 stmtList closeScope $@17 . WHILE '(' expr ')' ';'
+   69 doStmt: DO openScope $@18 stmtList closeScope $@19 . WHILE '(' expr ')' ';'
 
     WHILE  shift, and go to state 191
 
 
 state 182
 
-   60 whileStmt: WHILE '(' $@12 expr ')' openScope . $@13 stmtList closeScope
+   63 whileStmt: WHILE '(' $@14 expr ')' openScope . $@15 stmtList closeScope
 
-    $default  reduce using rule 59 ($@13)
+    $default  reduce using rule 62 ($@15)
 
-    $@13  go to state 192
+    $@15  go to state 192
 
 
 state 183
 
-   47 ifStmt: IF '(' expr ')' stmt ELSE . stmt
+   47 ifStmt: IF '(' expr ')' $@11 stmt . ifContinue
 
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    INT             shift, and go to state 4
-    STR             shift, and go to state 5
-    BOOL            shift, and go to state 6
-    SWITCH          shift, and go to state 114
-    CONST           shift, and go to state 8
-    DO              shift, and go to state 115
-    NOT             shift, and go to state 29
-    RETURN          shift, and go to state 116
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    WHILE           shift, and go to state 117
-    IF              shift, and go to state 118
-    PRINT           shift, and go to state 119
-    FOR             shift, and go to state 120
-    CONTINUE        shift, and go to state 121
-    BREAK           shift, and go to state 122
-    ';'             shift, and go to state 123
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-    '{'             shift, and go to state 108
+    ELSE  shift, and go to state 193
 
-    type              go to state 15
-    varDeclaration    go to state 124
-    constDeclaration  go to state 125
-    variable          go to state 12
-    stmtBlock         go to state 126
-    stmt              go to state 193
-    ifStmt            go to state 128
-    returnStmt        go to state 129
-    breakStmt         go to state 130
-    continueStmt      go to state 131
-    switchStmt        go to state 132
-    whileStmt         go to state 133
-    forStmt           go to state 134
-    doStmt            go to state 135
-    expr              go to state 137
-    lValue            go to state 36
-    consValues        go to state 37
-    openScope         go to state 138
+    $default  reduce using rule 48 (ifContinue)
+
+    ifContinue  go to state 194
 
 
 state 184
 
-   70 loopExpression: VARIDENTIFIER $@19 '=' . expr ';' expr ';' expr
+   75 loopExpression: VARIDENTIFIER $@23 '=' . expr ';' expr ';' expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -3255,30 +3231,30 @@ state 184
     '-'             shift, and go to state 33
     '('             shift, and go to state 34
 
-    expr        go to state 194
+    expr        go to state 195
     lValue      go to state 36
     consValues  go to state 37
 
 
 state 185
 
-   68 loopExpression: INT VARIDENTIFIER $@18 . '=' expr ';' expr ';' expr
+   73 loopExpression: INT VARIDENTIFIER $@20 . '=' expr $@21 ';' expr $@22 ';' expr
 
-    '='  shift, and go to state 195
+    '='  shift, and go to state 196
 
 
 state 186
 
-   63 forStmt: FOR '(' $@14 loopExpression ')' openScope . $@15 stmtList closeScope
+   66 forStmt: FOR '(' $@16 loopExpression ')' openScope . $@17 stmtList closeScope
 
-    $default  reduce using rule 62 ($@15)
+    $default  reduce using rule 65 ($@17)
 
-    $@15  go to state 196
+    $@17  go to state 197
 
 
 state 187
 
-   56 caseStmt: CASE . expr ':' stmtList
+   59 caseStmt: CASE . expr ':' stmtList
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -3292,51 +3268,51 @@ state 187
     '-'             shift, and go to state 33
     '('             shift, and go to state 34
 
-    expr        go to state 197
+    expr        go to state 198
     lValue      go to state 36
     consValues  go to state 37
 
 
 state 188
 
-   57 caseStmt: DEFAULT . ':' stmtList
+   60 caseStmt: DEFAULT . ':' stmtList
 
-    ':'  shift, and go to state 198
+    ':'  shift, and go to state 199
 
 
 state 189
 
-   53 switchStmt: SWITCH '(' expr ')' openScope $@11 caseStmts . closeScope
+   56 switchStmt: SWITCH '(' expr ')' openScope $@13 caseStmts . closeScope
 
     '}'  shift, and go to state 150
 
-    closeScope  go to state 199
+    closeScope  go to state 200
 
 
 state 190
 
-   54 caseStmts: caseStmt . caseStmts
-   55          | caseStmt .
+   57 caseStmts: caseStmt . caseStmts
+   58          | caseStmt .
 
     CASE     shift, and go to state 187
     DEFAULT  shift, and go to state 188
 
-    $default  reduce using rule 55 (caseStmts)
+    $default  reduce using rule 58 (caseStmts)
 
-    caseStmts  go to state 200
+    caseStmts  go to state 201
     caseStmt   go to state 190
 
 
 state 191
 
-   66 doStmt: DO openScope $@16 stmtList closeScope $@17 WHILE . '(' expr ')' ';'
+   69 doStmt: DO openScope $@18 stmtList closeScope $@19 WHILE . '(' expr ')' ';'
 
-    '('  shift, and go to state 201
+    '('  shift, and go to state 202
 
 
 state 192
 
-   60 whileStmt: WHILE '(' $@12 expr ')' openScope $@13 . stmtList closeScope
+   63 whileStmt: WHILE '(' $@14 expr ')' openScope $@15 . stmtList closeScope
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -3379,7 +3355,7 @@ state 192
     whileStmt         go to state 133
     forStmt           go to state 134
     doStmt            go to state 135
-    stmtList          go to state 202
+    stmtList          go to state 203
     expr              go to state 137
     lValue            go to state 36
     consValues        go to state 37
@@ -3388,136 +3364,40 @@ state 192
 
 state 193
 
-   47 ifStmt: IF '(' expr ')' stmt ELSE stmt .
+   50 ifContinue: ELSE . $@12 stmt
 
-    $default  reduce using rule 47 (ifStmt)
+    $default  reduce using rule 49 ($@12)
+
+    $@12  go to state 204
 
 
 state 194
 
-   70 loopExpression: VARIDENTIFIER $@19 '=' expr . ';' expr ';' expr
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   47 ifStmt: IF '(' expr ')' $@11 stmt ifContinue .
 
-    OR   shift, and go to state 47
-    AND  shift, and go to state 48
-    ';'  shift, and go to state 203
-    '>'  shift, and go to state 50
-    '<'  shift, and go to state 51
-    NE   shift, and go to state 52
-    EQ   shift, and go to state 53
-    LE   shift, and go to state 54
-    GE   shift, and go to state 55
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
+    $default  reduce using rule 47 (ifStmt)
 
 
 state 195
 
-   68 loopExpression: INT VARIDENTIFIER $@18 '=' . expr ';' expr ';' expr
-
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    NOT             shift, and go to state 29
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-
-    expr        go to state 204
-    lValue      go to state 36
-    consValues  go to state 37
-
-
-state 196
-
-   63 forStmt: FOR '(' $@14 loopExpression ')' openScope $@15 . stmtList closeScope
-
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    INT             shift, and go to state 4
-    STR             shift, and go to state 5
-    BOOL            shift, and go to state 6
-    SWITCH          shift, and go to state 114
-    CONST           shift, and go to state 8
-    DO              shift, and go to state 115
-    NOT             shift, and go to state 29
-    RETURN          shift, and go to state 116
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    WHILE           shift, and go to state 117
-    IF              shift, and go to state 118
-    PRINT           shift, and go to state 119
-    FOR             shift, and go to state 120
-    CONTINUE        shift, and go to state 121
-    BREAK           shift, and go to state 122
-    ';'             shift, and go to state 123
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-    '{'             shift, and go to state 108
-
-    type              go to state 15
-    varDeclaration    go to state 124
-    constDeclaration  go to state 125
-    variable          go to state 12
-    stmtBlock         go to state 126
-    stmt              go to state 127
-    ifStmt            go to state 128
-    returnStmt        go to state 129
-    breakStmt         go to state 130
-    continueStmt      go to state 131
-    switchStmt        go to state 132
-    whileStmt         go to state 133
-    forStmt           go to state 134
-    doStmt            go to state 135
-    stmtList          go to state 205
-    expr              go to state 137
-    lValue            go to state 36
-    consValues        go to state 37
-    openScope         go to state 138
-
-
-state 197
-
-   56 caseStmt: CASE expr . ':' stmtList
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   75 loopExpression: VARIDENTIFIER $@23 '=' expr . ';' expr ';' expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
+    ';'  shift, and go to state 205
     '>'  shift, and go to state 50
     '<'  shift, and go to state 51
     NE   shift, and go to state 52
@@ -3529,12 +3409,32 @@ state 197
     '*'  shift, and go to state 58
     '/'  shift, and go to state 59
     '%'  shift, and go to state 60
-    ':'  shift, and go to state 206
 
 
-state 198
+state 196
 
-   57 caseStmt: DEFAULT ':' . stmtList
+   73 loopExpression: INT VARIDENTIFIER $@20 '=' . expr $@21 ';' expr $@22 ';' expr
+
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    NOT             shift, and go to state 29
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+
+    expr        go to state 206
+    lValue      go to state 36
+    consValues  go to state 37
+
+
+state 197
+
+   66 forStmt: FOR '(' $@16 loopExpression ')' openScope $@17 . stmtList closeScope
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -3584,136 +3484,25 @@ state 198
     openScope         go to state 138
 
 
-state 199
+state 198
 
-   53 switchStmt: SWITCH '(' expr ')' openScope $@11 caseStmts closeScope .
-
-    $default  reduce using rule 53 (switchStmt)
-
-
-state 200
-
-   54 caseStmts: caseStmt caseStmts .
-
-    $default  reduce using rule 54 (caseStmts)
-
-
-state 201
-
-   66 doStmt: DO openScope $@16 stmtList closeScope $@17 WHILE '(' . expr ')' ';'
-
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    NOT             shift, and go to state 29
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-
-    expr        go to state 208
-    lValue      go to state 36
-    consValues  go to state 37
-
-
-state 202
-
-   60 whileStmt: WHILE '(' $@12 expr ')' openScope $@13 stmtList . closeScope
-   72 stmtList: stmtList . stmt
-
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    INT             shift, and go to state 4
-    STR             shift, and go to state 5
-    BOOL            shift, and go to state 6
-    SWITCH          shift, and go to state 114
-    CONST           shift, and go to state 8
-    DO              shift, and go to state 115
-    NOT             shift, and go to state 29
-    RETURN          shift, and go to state 116
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    WHILE           shift, and go to state 117
-    IF              shift, and go to state 118
-    PRINT           shift, and go to state 119
-    FOR             shift, and go to state 120
-    CONTINUE        shift, and go to state 121
-    BREAK           shift, and go to state 122
-    ';'             shift, and go to state 123
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-    '{'             shift, and go to state 108
-    '}'             shift, and go to state 150
-
-    type              go to state 15
-    varDeclaration    go to state 124
-    constDeclaration  go to state 125
-    variable          go to state 12
-    stmtBlock         go to state 126
-    stmt              go to state 151
-    ifStmt            go to state 128
-    returnStmt        go to state 129
-    breakStmt         go to state 130
-    continueStmt      go to state 131
-    switchStmt        go to state 132
-    whileStmt         go to state 133
-    forStmt           go to state 134
-    doStmt            go to state 135
-    expr              go to state 137
-    lValue            go to state 36
-    consValues        go to state 37
-    openScope         go to state 138
-    closeScope        go to state 209
-
-
-state 203
-
-   70 loopExpression: VARIDENTIFIER $@19 '=' expr ';' . expr ';' expr
-
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    NOT             shift, and go to state 29
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-
-    expr        go to state 210
-    lValue      go to state 36
-    consValues  go to state 37
-
-
-state 204
-
-   68 loopExpression: INT VARIDENTIFIER $@18 '=' expr . ';' expr ';' expr
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   59 caseStmt: CASE expr . ':' stmtList
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
-    ';'  shift, and go to state 211
     '>'  shift, and go to state 50
     '<'  shift, and go to state 51
     NE   shift, and go to state 52
@@ -3725,65 +3514,12 @@ state 204
     '*'  shift, and go to state 58
     '/'  shift, and go to state 59
     '%'  shift, and go to state 60
+    ':'  shift, and go to state 208
 
 
-state 205
+state 199
 
-   63 forStmt: FOR '(' $@14 loopExpression ')' openScope $@15 stmtList . closeScope
-   72 stmtList: stmtList . stmt
-
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    INT             shift, and go to state 4
-    STR             shift, and go to state 5
-    BOOL            shift, and go to state 6
-    SWITCH          shift, and go to state 114
-    CONST           shift, and go to state 8
-    DO              shift, and go to state 115
-    NOT             shift, and go to state 29
-    RETURN          shift, and go to state 116
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    WHILE           shift, and go to state 117
-    IF              shift, and go to state 118
-    PRINT           shift, and go to state 119
-    FOR             shift, and go to state 120
-    CONTINUE        shift, and go to state 121
-    BREAK           shift, and go to state 122
-    ';'             shift, and go to state 123
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-    '{'             shift, and go to state 108
-    '}'             shift, and go to state 150
-
-    type              go to state 15
-    varDeclaration    go to state 124
-    constDeclaration  go to state 125
-    variable          go to state 12
-    stmtBlock         go to state 126
-    stmt              go to state 151
-    ifStmt            go to state 128
-    returnStmt        go to state 129
-    breakStmt         go to state 130
-    continueStmt      go to state 131
-    switchStmt        go to state 132
-    whileStmt         go to state 133
-    forStmt           go to state 134
-    doStmt            go to state 135
-    expr              go to state 137
-    lValue            go to state 36
-    consValues        go to state 37
-    openScope         go to state 138
-    closeScope        go to state 212
-
-
-state 206
-
-   56 caseStmt: CASE expr ':' . stmtList
+   60 caseStmt: DEFAULT ':' . stmtList
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -3826,17 +3562,214 @@ state 206
     whileStmt         go to state 133
     forStmt           go to state 134
     doStmt            go to state 135
-    stmtList          go to state 213
+    stmtList          go to state 209
     expr              go to state 137
     lValue            go to state 36
     consValues        go to state 37
     openScope         go to state 138
+
+
+state 200
+
+   56 switchStmt: SWITCH '(' expr ')' openScope $@13 caseStmts closeScope .
+
+    $default  reduce using rule 56 (switchStmt)
+
+
+state 201
+
+   57 caseStmts: caseStmt caseStmts .
+
+    $default  reduce using rule 57 (caseStmts)
+
+
+state 202
+
+   69 doStmt: DO openScope $@18 stmtList closeScope $@19 WHILE '(' . expr ')' ';'
+
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    NOT             shift, and go to state 29
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+
+    expr        go to state 210
+    lValue      go to state 36
+    consValues  go to state 37
+
+
+state 203
+
+   63 whileStmt: WHILE '(' $@14 expr ')' openScope $@15 stmtList . closeScope
+   77 stmtList: stmtList . stmt
+
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    INT             shift, and go to state 4
+    STR             shift, and go to state 5
+    BOOL            shift, and go to state 6
+    SWITCH          shift, and go to state 114
+    CONST           shift, and go to state 8
+    DO              shift, and go to state 115
+    NOT             shift, and go to state 29
+    RETURN          shift, and go to state 116
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    WHILE           shift, and go to state 117
+    IF              shift, and go to state 118
+    PRINT           shift, and go to state 119
+    FOR             shift, and go to state 120
+    CONTINUE        shift, and go to state 121
+    BREAK           shift, and go to state 122
+    ';'             shift, and go to state 123
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+    '{'             shift, and go to state 108
+    '}'             shift, and go to state 150
+
+    type              go to state 15
+    varDeclaration    go to state 124
+    constDeclaration  go to state 125
+    variable          go to state 12
+    stmtBlock         go to state 126
+    stmt              go to state 151
+    ifStmt            go to state 128
+    returnStmt        go to state 129
+    breakStmt         go to state 130
+    continueStmt      go to state 131
+    switchStmt        go to state 132
+    whileStmt         go to state 133
+    forStmt           go to state 134
+    doStmt            go to state 135
+    expr              go to state 137
+    lValue            go to state 36
+    consValues        go to state 37
+    openScope         go to state 138
+    closeScope        go to state 211
+
+
+state 204
+
+   50 ifContinue: ELSE $@12 . stmt
+
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    INT             shift, and go to state 4
+    STR             shift, and go to state 5
+    BOOL            shift, and go to state 6
+    SWITCH          shift, and go to state 114
+    CONST           shift, and go to state 8
+    DO              shift, and go to state 115
+    NOT             shift, and go to state 29
+    RETURN          shift, and go to state 116
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    WHILE           shift, and go to state 117
+    IF              shift, and go to state 118
+    PRINT           shift, and go to state 119
+    FOR             shift, and go to state 120
+    CONTINUE        shift, and go to state 121
+    BREAK           shift, and go to state 122
+    ';'             shift, and go to state 123
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+    '{'             shift, and go to state 108
+
+    type              go to state 15
+    varDeclaration    go to state 124
+    constDeclaration  go to state 125
+    variable          go to state 12
+    stmtBlock         go to state 126
+    stmt              go to state 212
+    ifStmt            go to state 128
+    returnStmt        go to state 129
+    breakStmt         go to state 130
+    continueStmt      go to state 131
+    switchStmt        go to state 132
+    whileStmt         go to state 133
+    forStmt           go to state 134
+    doStmt            go to state 135
+    expr              go to state 137
+    lValue            go to state 36
+    consValues        go to state 37
+    openScope         go to state 138
+
+
+state 205
+
+   75 loopExpression: VARIDENTIFIER $@23 '=' expr ';' . expr ';' expr
+
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    NOT             shift, and go to state 29
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+
+    expr        go to state 213
+    lValue      go to state 36
+    consValues  go to state 37
+
+
+state 206
+
+   73 loopExpression: INT VARIDENTIFIER $@20 '=' expr . $@21 ';' expr $@22 ';' expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    OR   shift, and go to state 47
+    AND  shift, and go to state 48
+    '>'  shift, and go to state 50
+    '<'  shift, and go to state 51
+    NE   shift, and go to state 52
+    EQ   shift, and go to state 53
+    LE   shift, and go to state 54
+    GE   shift, and go to state 55
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+    $default  reduce using rule 71 ($@21)
+
+    $@21  go to state 214
 
 
 state 207
 
-   57 caseStmt: DEFAULT ':' stmtList .
-   72 stmtList: stmtList . stmt
+   66 forStmt: FOR '(' $@16 loopExpression ')' openScope $@17 stmtList . closeScope
+   77 stmtList: stmtList . stmt
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -3864,8 +3797,7 @@ state 207
     '-'             shift, and go to state 33
     '('             shift, and go to state 34
     '{'             shift, and go to state 108
-
-    $default  reduce using rule 57 (caseStmt)
+    '}'             shift, and go to state 150
 
     type              go to state 15
     varDeclaration    go to state 124
@@ -3885,113 +3817,12 @@ state 207
     lValue            go to state 36
     consValues        go to state 37
     openScope         go to state 138
+    closeScope        go to state 215
 
 
 state 208
 
-   66 doStmt: DO openScope $@16 stmtList closeScope $@17 WHILE '(' expr . ')' ';'
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-
-    OR   shift, and go to state 47
-    AND  shift, and go to state 48
-    '>'  shift, and go to state 50
-    '<'  shift, and go to state 51
-    NE   shift, and go to state 52
-    EQ   shift, and go to state 53
-    LE   shift, and go to state 54
-    GE   shift, and go to state 55
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
-    ')'  shift, and go to state 214
-
-
-state 209
-
-   60 whileStmt: WHILE '(' $@12 expr ')' openScope $@13 stmtList closeScope .
-
-    $default  reduce using rule 60 (whileStmt)
-
-
-state 210
-
-   70 loopExpression: VARIDENTIFIER $@19 '=' expr ';' expr . ';' expr
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-
-    OR   shift, and go to state 47
-    AND  shift, and go to state 48
-    ';'  shift, and go to state 215
-    '>'  shift, and go to state 50
-    '<'  shift, and go to state 51
-    NE   shift, and go to state 52
-    EQ   shift, and go to state 53
-    LE   shift, and go to state 54
-    GE   shift, and go to state 55
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-
-state 211
-
-   68 loopExpression: INT VARIDENTIFIER $@18 '=' expr ';' . expr ';' expr
-
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    NOT             shift, and go to state 29
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-
-    expr        go to state 216
-    lValue      go to state 36
-    consValues  go to state 37
-
-
-state 212
-
-   63 forStmt: FOR '(' $@14 loopExpression ')' openScope $@15 stmtList closeScope .
-
-    $default  reduce using rule 63 (forStmt)
-
-
-state 213
-
-   56 caseStmt: CASE expr ':' stmtList .
-   72 stmtList: stmtList . stmt
+   59 caseStmt: CASE expr ':' . stmtList
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -4020,7 +3851,60 @@ state 213
     '('             shift, and go to state 34
     '{'             shift, and go to state 108
 
-    $default  reduce using rule 56 (caseStmt)
+    type              go to state 15
+    varDeclaration    go to state 124
+    constDeclaration  go to state 125
+    variable          go to state 12
+    stmtBlock         go to state 126
+    stmt              go to state 127
+    ifStmt            go to state 128
+    returnStmt        go to state 129
+    breakStmt         go to state 130
+    continueStmt      go to state 131
+    switchStmt        go to state 132
+    whileStmt         go to state 133
+    forStmt           go to state 134
+    doStmt            go to state 135
+    stmtList          go to state 216
+    expr              go to state 137
+    lValue            go to state 36
+    consValues        go to state 37
+    openScope         go to state 138
+
+
+state 209
+
+   60 caseStmt: DEFAULT ':' stmtList .
+   77 stmtList: stmtList . stmt
+
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    INT             shift, and go to state 4
+    STR             shift, and go to state 5
+    BOOL            shift, and go to state 6
+    SWITCH          shift, and go to state 114
+    CONST           shift, and go to state 8
+    DO              shift, and go to state 115
+    NOT             shift, and go to state 29
+    RETURN          shift, and go to state 116
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    WHILE           shift, and go to state 117
+    IF              shift, and go to state 118
+    PRINT           shift, and go to state 119
+    FOR             shift, and go to state 120
+    CONTINUE        shift, and go to state 121
+    BREAK           shift, and go to state 122
+    ';'             shift, and go to state 123
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+    '{'             shift, and go to state 108
+
+    $default  reduce using rule 60 (caseStmt)
 
     type              go to state 15
     varDeclaration    go to state 124
@@ -4042,111 +3926,164 @@ state 213
     openScope         go to state 138
 
 
+state 210
+
+   69 doStmt: DO openScope $@18 stmtList closeScope $@19 WHILE '(' expr . ')' ';'
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    OR   shift, and go to state 47
+    AND  shift, and go to state 48
+    '>'  shift, and go to state 50
+    '<'  shift, and go to state 51
+    NE   shift, and go to state 52
+    EQ   shift, and go to state 53
+    LE   shift, and go to state 54
+    GE   shift, and go to state 55
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+    ')'  shift, and go to state 217
+
+
+state 211
+
+   63 whileStmt: WHILE '(' $@14 expr ')' openScope $@15 stmtList closeScope .
+
+    $default  reduce using rule 63 (whileStmt)
+
+
+state 212
+
+   50 ifContinue: ELSE $@12 stmt .
+
+    $default  reduce using rule 50 (ifContinue)
+
+
+state 213
+
+   75 loopExpression: VARIDENTIFIER $@23 '=' expr ';' expr . ';' expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    OR   shift, and go to state 47
+    AND  shift, and go to state 48
+    ';'  shift, and go to state 218
+    '>'  shift, and go to state 50
+    '<'  shift, and go to state 51
+    NE   shift, and go to state 52
+    EQ   shift, and go to state 53
+    LE   shift, and go to state 54
+    GE   shift, and go to state 55
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+
 state 214
 
-   66 doStmt: DO openScope $@16 stmtList closeScope $@17 WHILE '(' expr ')' . ';'
+   73 loopExpression: INT VARIDENTIFIER $@20 '=' expr $@21 . ';' expr $@22 ';' expr
 
-    ';'  shift, and go to state 217
+    ';'  shift, and go to state 219
 
 
 state 215
 
-   70 loopExpression: VARIDENTIFIER $@19 '=' expr ';' expr ';' . expr
+   66 forStmt: FOR '(' $@16 loopExpression ')' openScope $@17 stmtList closeScope .
 
-    STRING          shift, and go to state 24
-    INTEGER         shift, and go to state 25
-    VARIDENTIFIER   shift, and go to state 26
-    TRUEBOOL        shift, and go to state 27
-    FALSEBOOL       shift, and go to state 28
-    NOT             shift, and go to state 29
-    INC             shift, and go to state 30
-    DEC             shift, and go to state 31
-    FUNCIDENTIFIER  shift, and go to state 32
-    '-'             shift, and go to state 33
-    '('             shift, and go to state 34
-
-    expr        go to state 218
-    lValue      go to state 36
-    consValues  go to state 37
+    $default  reduce using rule 66 (forStmt)
 
 
 state 216
 
-   68 loopExpression: INT VARIDENTIFIER $@18 '=' expr ';' expr . ';' expr
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   59 caseStmt: CASE expr ':' stmtList .
+   77 stmtList: stmtList . stmt
 
-    OR   shift, and go to state 47
-    AND  shift, and go to state 48
-    ';'  shift, and go to state 219
-    '>'  shift, and go to state 50
-    '<'  shift, and go to state 51
-    NE   shift, and go to state 52
-    EQ   shift, and go to state 53
-    LE   shift, and go to state 54
-    GE   shift, and go to state 55
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    INT             shift, and go to state 4
+    STR             shift, and go to state 5
+    BOOL            shift, and go to state 6
+    SWITCH          shift, and go to state 114
+    CONST           shift, and go to state 8
+    DO              shift, and go to state 115
+    NOT             shift, and go to state 29
+    RETURN          shift, and go to state 116
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    WHILE           shift, and go to state 117
+    IF              shift, and go to state 118
+    PRINT           shift, and go to state 119
+    FOR             shift, and go to state 120
+    CONTINUE        shift, and go to state 121
+    BREAK           shift, and go to state 122
+    ';'             shift, and go to state 123
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+    '{'             shift, and go to state 108
+
+    $default  reduce using rule 59 (caseStmt)
+
+    type              go to state 15
+    varDeclaration    go to state 124
+    constDeclaration  go to state 125
+    variable          go to state 12
+    stmtBlock         go to state 126
+    stmt              go to state 151
+    ifStmt            go to state 128
+    returnStmt        go to state 129
+    breakStmt         go to state 130
+    continueStmt      go to state 131
+    switchStmt        go to state 132
+    whileStmt         go to state 133
+    forStmt           go to state 134
+    doStmt            go to state 135
+    expr              go to state 137
+    lValue            go to state 36
+    consValues        go to state 37
+    openScope         go to state 138
 
 
 state 217
 
-   66 doStmt: DO openScope $@16 stmtList closeScope $@17 WHILE '(' expr ')' ';' .
+   69 doStmt: DO openScope $@18 stmtList closeScope $@19 WHILE '(' expr ')' . ';'
 
-    $default  reduce using rule 66 (doStmt)
+    ';'  shift, and go to state 220
 
 
 state 218
 
-   70 loopExpression: VARIDENTIFIER $@19 '=' expr ';' expr ';' expr .
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
-
-    OR   shift, and go to state 47
-    AND  shift, and go to state 48
-    '>'  shift, and go to state 50
-    '<'  shift, and go to state 51
-    NE   shift, and go to state 52
-    EQ   shift, and go to state 53
-    LE   shift, and go to state 54
-    GE   shift, and go to state 55
-    '+'  shift, and go to state 56
-    '-'  shift, and go to state 57
-    '*'  shift, and go to state 58
-    '/'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 70 (loopExpression)
-
-
-state 219
-
-   68 loopExpression: INT VARIDENTIFIER $@18 '=' expr ';' expr ';' . expr
+   75 loopExpression: VARIDENTIFIER $@23 '=' expr ';' expr ';' . expr
 
     STRING          shift, and go to state 24
     INTEGER         shift, and go to state 25
@@ -4160,27 +4097,55 @@ state 219
     '-'             shift, and go to state 33
     '('             shift, and go to state 34
 
-    expr        go to state 220
+    expr        go to state 221
+    lValue      go to state 36
+    consValues  go to state 37
+
+
+state 219
+
+   73 loopExpression: INT VARIDENTIFIER $@20 '=' expr $@21 ';' . expr $@22 ';' expr
+
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    NOT             shift, and go to state 29
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+
+    expr        go to state 222
     lValue      go to state 36
     consValues  go to state 37
 
 
 state 220
 
-   68 loopExpression: INT VARIDENTIFIER $@18 '=' expr ';' expr ';' expr .
-   79 expr: expr . '+' expr
-   80     | expr . '-' expr
-   81     | expr . '*' expr
-   82     | expr . '/' expr
-   83     | expr . '<' expr
-   84     | expr . '>' expr
-   85     | expr . '%' expr
-   86     | expr . OR expr
-   87     | expr . AND expr
-   97     | expr . GE expr
-   98     | expr . LE expr
-   99     | expr . NE expr
-  100     | expr . EQ expr
+   69 doStmt: DO openScope $@18 stmtList closeScope $@19 WHILE '(' expr ')' ';' .
+
+    $default  reduce using rule 69 (doStmt)
+
+
+state 221
+
+   75 loopExpression: VARIDENTIFIER $@23 '=' expr ';' expr ';' expr .
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
 
     OR   shift, and go to state 47
     AND  shift, and go to state 48
@@ -4196,4 +4161,102 @@ state 220
     '/'  shift, and go to state 59
     '%'  shift, and go to state 60
 
-    $default  reduce using rule 68 (loopExpression)
+    $default  reduce using rule 75 (loopExpression)
+
+
+state 222
+
+   73 loopExpression: INT VARIDENTIFIER $@20 '=' expr $@21 ';' expr . $@22 ';' expr
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    OR   shift, and go to state 47
+    AND  shift, and go to state 48
+    '>'  shift, and go to state 50
+    '<'  shift, and go to state 51
+    NE   shift, and go to state 52
+    EQ   shift, and go to state 53
+    LE   shift, and go to state 54
+    GE   shift, and go to state 55
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+    $default  reduce using rule 72 ($@22)
+
+    $@22  go to state 223
+
+
+state 223
+
+   73 loopExpression: INT VARIDENTIFIER $@20 '=' expr $@21 ';' expr $@22 . ';' expr
+
+    ';'  shift, and go to state 224
+
+
+state 224
+
+   73 loopExpression: INT VARIDENTIFIER $@20 '=' expr $@21 ';' expr $@22 ';' . expr
+
+    STRING          shift, and go to state 24
+    INTEGER         shift, and go to state 25
+    VARIDENTIFIER   shift, and go to state 26
+    TRUEBOOL        shift, and go to state 27
+    FALSEBOOL       shift, and go to state 28
+    NOT             shift, and go to state 29
+    INC             shift, and go to state 30
+    DEC             shift, and go to state 31
+    FUNCIDENTIFIER  shift, and go to state 32
+    '-'             shift, and go to state 33
+    '('             shift, and go to state 34
+
+    expr        go to state 225
+    lValue      go to state 36
+    consValues  go to state 37
+
+
+state 225
+
+   73 loopExpression: INT VARIDENTIFIER $@20 '=' expr $@21 ';' expr $@22 ';' expr .
+   84 expr: expr . '+' expr
+   85     | expr . '-' expr
+   86     | expr . '*' expr
+   87     | expr . '/' expr
+   88     | expr . '<' expr
+   89     | expr . '>' expr
+   90     | expr . '%' expr
+   91     | expr . OR expr
+   92     | expr . AND expr
+  102     | expr . GE expr
+  103     | expr . LE expr
+  104     | expr . NE expr
+  105     | expr . EQ expr
+
+    OR   shift, and go to state 47
+    AND  shift, and go to state 48
+    '>'  shift, and go to state 50
+    '<'  shift, and go to state 51
+    NE   shift, and go to state 52
+    EQ   shift, and go to state 53
+    LE   shift, and go to state 54
+    GE   shift, and go to state 55
+    '+'  shift, and go to state 56
+    '-'  shift, and go to state 57
+    '*'  shift, and go to state 58
+    '/'  shift, and go to state 59
+    '%'  shift, and go to state 60
+
+    $default  reduce using rule 73 (loopExpression)
