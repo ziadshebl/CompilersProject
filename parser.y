@@ -82,6 +82,7 @@ program:
                                         for(int j=0; j<totalNumberOfScopes; j++){
                                                 symbolTable symb= symbolTableList[j];
                                                 symbolTableEntry* traverser;
+                                                display_symbol_table(j,symb.symbolTable);
                                                 for(int i=0; i < MAX_IDENTIFIERS; i++)
                                                 {
                                                         traverser = symb.symbolTable[i];
@@ -112,8 +113,13 @@ type:   INT                     {varType = dataTypeEnum::typeInt;}
         ;
    
 functionParam:
-        variable
-        | variable ',' functionParam
+        variable                        {
+                                                  
+                                        }
+        | variable                      {
+                                                 
+                                        } 
+        ',' functionParam
         |  /* NULL */
         ;
 functionArgs: 
@@ -121,6 +127,9 @@ functionArgs:
                                                 if($1!=NULL){
 
                                                         argumentList[argumentListIndex] = $1->dataType;
+                                                         std::string  stringToAdd = "pop r";
+                                                         stringToAdd += to_string(argumentListIndex);  
+                                                         appendLineToFile(stringToAdd);  
                                                         argumentListIndex++;
                                                 }else{
                                                         argumentList[argumentListIndex] = -1;
@@ -131,6 +140,9 @@ functionArgs:
                                                 if($1!=NULL){
 
                                                         argumentList[argumentListIndex] = $1->dataType;
+                                                        std::string  stringToAdd = "pop r";
+                                                         stringToAdd += to_string(argumentListIndex);  
+                                                         appendLineToFile(stringToAdd);  
                                                         argumentListIndex++;
                                                 }else{
                                                         argumentList[argumentListIndex] = -1;
@@ -201,6 +213,11 @@ variable:
                                                 if(isFunctionParam == true){
                                                         $2->entryType = entryTypeEnum::isParameter;
                                                         paramList[paramListIndex] = varType;
+                                                        std::string  stringToAdd = "mov r";
+                                                        stringToAdd +=  to_string(paramListIndex);
+                                                        stringToAdd += " , ";  
+                                                        stringToAdd += $2->lexeme;
+                                                        appendLineToFile(stringToAdd); 
                                                         paramListIndex++;
                                                         $2->isInitialized = true;
                                                 }               
@@ -212,7 +229,10 @@ functionDeclaration:
         type FUNCTION  FUNCIDENTIFIER  {
                                                 isFunctionParam=true;
                                                 $3 = insert(symbolTableList[currentScope].symbolTable,yylval.stringValue,varType); 
-                                                $3->entryType = entryTypeEnum::isFunction;     
+                                                $3->entryType = entryTypeEnum::isFunction; 
+                                                std::string temp = $3->lexeme;
+                                                temp+=":";
+                                                appendLineToFile(temp);    
                                                                                                                            
                                         }
         '('                             {       
@@ -241,6 +261,9 @@ functionDeclaration:
                                                 $3 = insert(symbolTableList[currentScope].symbolTable,yylval.stringValue,dataTypeEnum::typeVoid); 
                                                 $3->entryType = entryTypeEnum::isFunction;
                                                 isFunctionParam=true;
+                                                std::string temp = $3->lexeme;
+                                                temp+=":";
+                                                appendLineToFile(temp);  
                                                
                                         }
         '('                             {
@@ -292,10 +315,28 @@ returnStmt:
                                                          if (functionDataType!=$2->dataType){
                                                                 appendErrorToFile("Type mismatch at line "+ to_string(yylineno));
                                                         }
+
+                                                        std::string stringToAdd = "pop ";
+                                                        stringToAdd += "R0";
+                                                        appendLineToFile(stringToAdd);
+                                                        stringToAdd = "pop ";
+                                                        stringToAdd += "R1";
+                                                        appendLineToFile(stringToAdd); 
+                                                        stringToAdd = "push ";
+                                                        stringToAdd += "R0";
+                                                        appendLineToFile(stringToAdd); 
+                                                        stringToAdd = "push ";
+                                                        stringToAdd += "R1";
+                                                        appendLineToFile(stringToAdd); 
+                                                        stringToAdd = "ret ";
+                                                        appendLineToFile(stringToAdd); 
                                                 }  
         | RETURN ';'                            {
-                                                         if (functionDataType!=dataTypeEnum::typeVoid){
+                                                        if (functionDataType!=dataTypeEnum::typeVoid){
                                                                 appendErrorToFile("Type mismatch at line "+ to_string(yylineno));
+                                                        }else{
+                                                                std::string stringToAdd = "ret ";
+                                                                appendLineToFile(stringToAdd);
                                                         } 
                                                 } 
         ;
@@ -376,27 +417,19 @@ forStmt:  FOR '('                                               {
                                                                        
                                                                         currentScope = createNewScope();
                                                                         isBracketScope = true;
+                                                                         
+                                                                        
                                                                 }
           loopExpression ')' openScope                          {
                                                                         isForScope = true;
-                                                                        isBracketScope = false;
-
-                                                                        std::string stringToAdd = "L";
-                                                                        stringToAdd += to_string(labelNumber);
-                                                                        stringToAdd += ": ";
-                                                                        appendLineToFile(stringToAdd);  
-                                                                        labelNumber++;         
+                                                                        isBracketScope = false;   
                                                                 
                                                                 }
           stmtList closeScope                                   {       
                                                                         isForScope = false;
-                                                                           
-                                                                        
-                                                                        std::string stringToAdd = "L";
+                                                                        std::string stringToAdd = "JMP L";
                                                                         stringToAdd += to_string(labelNumber);
-                                                                        stringToAdd += ": ";
                                                                         appendLineToFile(stringToAdd);  
-                                                                        labelNumber++;          
                                                                 }
         ;
 doStmt: 
@@ -430,15 +463,15 @@ loopExpression:
         INT VARIDENTIFIER               {
                                                 $2 = insert(symbolTableList[currentScope].symbolTable,yylval.stringValue,dataTypeEnum::typeInt);
                                                 $2->isInitialized = true;
-                                        }
-        '=' expr ';'                    {                               
-                                                std::string stringToAdd = "L";
-                                                stringToAdd += to_string(labelNumber);
-                                                stringToAdd += ": ";
+                                                std::string stringToAdd = "pop ";
+                                                stringToAdd += $2->lexeme;
+                                                appendLineToFile(stringToAdd); 
+                                                stringToAdd = "JMP L";
+                                                stringToAdd += to_string(labelNumber+1);
                                                 appendLineToFile(stringToAdd);  
-                                                labelNumber++;         
-                                        }
-        expr ';' expr      
+                                                
+                                       }
+        '=' expr ';' expr ';' expr      
         |  VARIDENTIFIER                {
                                                 $1 = isAvailable(yylval.stringValue);
                                                 if($1==NULL){
@@ -537,7 +570,9 @@ expr:
                                                                         $$=$1; 
                                                                 }
                                                         }   
-                                                        
+                                                        std::string  stringToAdd = "call ";
+                                                         stringToAdd += $1->lexeme;  
+                                                         appendLineToFile(stringToAdd);  
                                                         argumentListIndex=0;
                                                 
                                                 }
@@ -1153,6 +1188,7 @@ void yyerror(char *s) {
 }
 
 #define LEN 256
+<<<<<<< HEAD
 void addText (std::string myTxt)
 {
    FILE * fp;
@@ -1166,14 +1202,14 @@ void addText (std::string myTxt)
    fclose (fp);
 }
 
+=======
+>>>>>>> 617a0ec88d30797abdd80785a57a655c123610f7
 void appendLineToFile(std::string line)
 {
     std::ofstream file;
     file.open ("./output.txt", std::ios::out | std::ios::app );
     file << line << std::endl;
 }
-
-
 
 void appendErrorToFile(std::string line)
 {
@@ -1184,6 +1220,12 @@ void appendErrorToFile(std::string line)
 
 int main (int argc, char *argv[]){
 	// parsing
+        std::ofstream file1;
+        file1.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/error.txt", std::ios::out);
+        file1<<"";
+        std::ofstream file2;
+        file2.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/output.txt", std::ios::out);
+        file2<<"";
         symbolTableList[0].symbolTable = createTable();
         symbolTableList[0].parent = -1;
 	yyin = fopen(argv[1], "r");
@@ -1197,6 +1239,6 @@ int main (int argc, char *argv[]){
 		printf("\nPARSING FAILED!\n\n\n");
 	}
 	fclose(yyin);
-        display_symbol_table(symbolTableList[2].symbolTable);
+        //display_symbol_table(symbolTableList[2].symbolTable);
 
 }

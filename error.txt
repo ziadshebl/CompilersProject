@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 Type mismatch at line 4
 Type mismatch at line 4
+=======
+Type mismatch at line 2
+>>>>>>> 617a0ec88d30797abdd80785a57a655c123610f7

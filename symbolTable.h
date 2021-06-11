@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <limits.h>
 #include <string.h>
+#include <iostream>
+#include <fstream>
 // #include <vector>
 // #include <string>
 
@@ -61,6 +63,13 @@ symbolTableEntry** createTable()
 	}
 
 	return ptr;
+}
+
+void appendErrorToFile2(std::string line)
+{
+    std::ofstream file;
+    file.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/error.txt", std::ios::out | std::ios::app );
+    file << line << std::endl;
 }
 
 int createNewScope()
@@ -190,6 +199,9 @@ symbolTableEntry* insert(symbolTableEntry** symbolTable, char* lexeme, dataTypeE
 	if( temp != NULL)
 	{
 		printf("ERROR: Redeclared Variable %s\n", lexeme);
+		std::string temp = lexeme;
+		appendErrorToFile2("Redeclared Variable +" + temp);
+
 		return NULL;
 	}
 	
@@ -206,6 +218,7 @@ symbolTableEntry* insert(symbolTableEntry** symbolTable, char* lexeme, dataTypeE
 	if(newEntry == NULL)
 	{
 		printf("ERROR: Couldn't create a new entry in the hashed table\n");
+
 		exit(1);
 	}else{
 	
@@ -238,10 +251,18 @@ void print_dashes(int n)
 }
 
 
-// Traverse the myhash table and print all the entries
-void display_symbol_table(symbolTableEntry** hash_table_ptr)
+
+void appendSymbolToFile(int symbolTable,std::string line)
 {
-	printf("PRINT FUNC");
+    std::ofstream file;
+    file.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/symbol"+to_string(symbolTable)+".txt", std::ios::out | std::ios::app );
+    file << line << std::endl;
+}
+
+// Traverse the myhash table and print all the entries
+void display_symbol_table(int symbolTable, symbolTableEntry** hash_table_ptr)
+{
+	
 	symbolTableEntry* traverser;
 
 	print_dashes(100);
@@ -249,19 +270,31 @@ void display_symbol_table(symbolTableEntry** hash_table_ptr)
  	printf(" %-20s %-20s %-20s %-20s\n","lexeme","dataType","entryType","parameterList");
 
 	print_dashes(100);
-
+	std::ofstream file;
+    file.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/symbol"+to_string(symbolTable)+".txt", std::ios::out);
+    file << "";
 	for(int i=0; i < MAX_IDENTIFIERS; i++)
 	{
 		// printf("In loop\n");
 		traverser = hash_table_ptr[i];
 		while( traverser != NULL)
-		{
+		{	
+			std::string toLog = traverser->lexeme;
+			toLog+= " ";
+			toLog+= to_string(traverser->dataType);
+			toLog+= " ";
+			toLog+= to_string(traverser->entryType);
+			toLog+= " ";
+			
 			printf(" %-20s %-20d %-20d", traverser->lexeme, traverser->dataType, traverser->entryType);
 			if(traverser->functionsParametersNumber!=0){
 				for(int i=0; i<traverser->functionsParametersNumber; i++){
+					toLog+= to_string(traverser->functionParametersList[i]);
+					toLog+=",";
 					printf("%-5d",traverser->functionParametersList[i]);
 				}
 			}
+			appendSymbolToFile(symbolTable,toLog);
 			printf("\n");
 			traverser = traverser->next;
 		}
@@ -270,6 +303,7 @@ void display_symbol_table(symbolTableEntry** hash_table_ptr)
 	print_dashes(100);
 
 }
+
 
 
 
