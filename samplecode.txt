@@ -1,0 +1,5 @@
+void func Main()
+{
+  int x = 0;
+  x=true;
+}

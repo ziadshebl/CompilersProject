@@ -1,5 +1,6 @@
 Main:
 push 0
+<<<<<<< HEAD
 pop i
 L0: 
 push 0
@@ -9,3 +10,8 @@ push 0
 cmpLT 
 JNZ L0
 L1: 
+=======
+pop x
+push 1
+pop x
+>>>>>>> 62cd03f61d73e1375dcc4117c8f64c68a84107c2

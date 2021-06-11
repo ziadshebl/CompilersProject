@@ -3676,14 +3676,14 @@ void yyerror(char *s) {
 void appendLineToFile(std::string line)
 {
     std::ofstream file;
-    file.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/output.txt", std::ios::out | std::ios::app );
+    file.open ("./output.txt", std::ios::out | std::ios::app );
     file << line << std::endl;
 }
 
 void appendErrorToFile(std::string line)
 {
     std::ofstream file;
-    file.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/error.txt", std::ios::out | std::ios::app );
+    file.open ("./error.txt", std::ios::out | std::ios::app );
     file << line << std::endl;
 }
 void createLabel(labelType type){
@@ -3727,10 +3727,10 @@ void deleteLabel(){
 int main (int argc, char *argv[]){
 	// parsing
         std::ofstream file1;
-        file1.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/error.txt", std::ios::out);
+        file1.open ("./error.txt", std::ios::out);
         file1<<"";
         std::ofstream file2;
-        file2.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/output.txt", std::ios::out);
+        file2.open ("./output.txt", std::ios::out);
         file2<<"";
         symbolTableList[0].symbolTable = createTable();
         symbolTableList[0].parent = -1;
