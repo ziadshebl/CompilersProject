@@ -1,5 +1,6 @@
 import sys
 import subprocess
+import os
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtGui import QFont, QIcon, QPixmap
@@ -104,11 +105,11 @@ class Window(QWidget):
         None
         
     def build_button_handler(self):
-        with open("D:/Spring 2021/Languages and compilers/Project/Project/CompilersProject/code.txt", "w") as code_file:
+        with open("code.txt", "w") as code_file:
             code_file.write(str(self.input_code_text_area.toPlainText()))
-        subprocess.call([r'D:/Spring 2021/Languages and compilers/Project/Project/CompilersProject/run.bat'])
-        error_file =open("D:/Spring 2021/Languages and compilers/Project/Project/CompilersProject/error.txt","r")
-        quadruples_file=open("D:/Spring 2021/Languages and compilers/Project/Project/CompilersProject/output.txt","r")
+        subprocess.call([r'run.bat'])
+        error_file =open("error.txt","r")
+        quadruples_file=open("output.txt","r")
         error_file=error_file.read()
         self.debug_console_text_area.setPlainText(error_file)
         quadruples_file=quadruples_file.read()
