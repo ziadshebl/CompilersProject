@@ -1157,7 +1157,7 @@ void addText (std::string myTxt)
 {
    FILE * fp;
    /* open the file for writing*/
-   fp = fopen ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/output.txt","wt");
+   fp = fopen ("./output.txt","wt");
 
    /* write 10 lines of text into the file stream*/
    fprintf(fp, "%s\n", myTxt);
@@ -1169,7 +1169,7 @@ void addText (std::string myTxt)
 void appendLineToFile(std::string line)
 {
     std::ofstream file;
-    file.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/output.txt", std::ios::out | std::ios::app );
+    file.open ("./output.txt", std::ios::out | std::ios::app );
     file << line << std::endl;
 }
 
@@ -1178,7 +1178,7 @@ void appendLineToFile(std::string line)
 void appendErrorToFile(std::string line)
 {
     std::ofstream file;
-    file.open ("C:/Users/Ziadkamal/Desktop/Senior-1/Compilers/Project/Phase1_Team1/error.txt", std::ios::out | std::ios::app );
+    file.open ("./error.txt", std::ios::out | std::ios::app );
     file << line << std::endl;
 }
 
