@@ -32,18 +32,23 @@ int endLabel = 1;
 int paramList [5];
 int paramListIndex = 0;
 int argumentList [5];
-typedef enum   {whileLabel,doLabel, forLabel, ifLabel}  labelType;
+typedef enum   {whileLabel,doLabel, forLabel, ifLabel, switchLabel}  labelType;
 void createLabel(labelType type);
+int getNextCaseLabel();
+int getCurrentCaseLabel();
 void deleteLabel();
 struct label{
         labelType type;
-        int labelsNames[4];
+        int labelsNames[20];
+        int currentSwitchLabel = 0;
+        int hasDefault = 0;
+        dataTypeEnum switchType;
 };
-struct lablesController {
+struct labelsController {
         int currentIndex = -1;
         label * labelBlocks[100];      
 };
-lablesController labels;
+labelsController labels;
 int argumentListIndex = 0;
 int labelNumber = 0;
 dataTypeEnum functionDataType; 
@@ -351,7 +356,7 @@ ifContinue:
         ELSE            {
                                                         /*TODO:CHECK BOOL EXPRESSION*/
                                                         std::string temp = "L";
-                                                        temp+= to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
+                                                        temp+= to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
                                                         temp+=':';
                                                         appendLineToFile(temp);
                                                 } 
@@ -396,7 +401,13 @@ breakStmt:
                                                                         
                                                         }else{
                                                                 std::string temp = "JMP L";
-                                                                temp+= to_string(endLabel);
+                                                                if(labels.labelBlocks[labels.currentIndex]->type == labelType::forLabel){
+                                                                        temp += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[3]);
+                                                                }else if(labels.labelBlocks[labels.currentIndex]->type == labelType::switchLabel){
+                                                                        temp += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[19]);
+                                                                }else{
+                                                                         temp += to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
+                                                                }
                                                                 appendLineToFile(temp);
                                                         }
                                                 }
@@ -408,33 +419,88 @@ continueStmt:
                                                                 
                                                         }else{
                                                                 std::string temp = "JMP L";
-                                                                temp+= to_string(startLabel);
+                                                                temp+= to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
                                                                 appendLineToFile(temp);
                                                         }
                                                 }
         ;
 switchStmt:
         SWITCH '(' expr ')' openScope   {
+                                                
+                                                if($3->entryType != entryTypeEnum::isVariable){
+                                                        
+                                                        appendErrorToFile("Switch must take a variable at line "+ to_string(yylineno)); 
+                                                }
+                                                
+                                                createLabel(labelType::switchLabel);
+                                               
+                                                labels.labelBlocks[labels.currentIndex]->switchType = $3->dataType;
                                                 isSwitchScope = true;
                                                 switchDataType = $3->dataType;
+                                                
                                         }
          caseStmts closeScope           {
+                                               
+                                                std::string stringToAdd = "L";
+                                                stringToAdd+=to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[19]);
+                                                stringToAdd+=":";
+                                                appendLineToFile(stringToAdd);
+                                                deleteLabel();
                                                 isSwitchScope = false;
                                         }
         ;
 caseStmts:
         caseStmt caseStmts
-        | caseStmt
+        | caseStmt      
         ;
 caseStmt:
-        CASE expr ':' stmtList          {
-                                                if($2!=NULL){
-                                                        if($2->dataType != switchDataType){
-                                                               appendErrorToFile("Type mismatch at line"+ to_string(yylineno));
-                                                        }
+        CASE                            { 
+                                                int caseNumer = getCurrentCaseLabel();
+                                
+                                                std::string stringToAdd = "L";
+                                                stringToAdd+=to_string(caseNumer);
+                                                stringToAdd+=":";
+                                                appendLineToFile(stringToAdd);
+                                        }
+        expr                            {
+     
+                                                if($3!=NULL &&$3->dataType != labels.labelBlocks[labels.currentIndex]->switchType){
+                                                        appendErrorToFile("Type mismatch at line "+ to_string(yylineno)); 
+
+                                                }else{
+
+                                                int nextCaseNumber = getNextCaseLabel();
+                                                
+                                                std::string stringToAdd = "cmpEQ ";
+                                                appendLineToFile(stringToAdd);
+                                                stringToAdd = "JNE L";
+                                                stringToAdd+= to_string(nextCaseNumber);
+                                                appendLineToFile(stringToAdd);
+                                                }
+                                        
+  
+                                      }
+                ':'               {
+                                        currentScope = createNewScope();
+                                  }       
+                stmtList          {
+                                        currentScope = exitScope(); 
+                                  }
+        | DEFAULT                       {
+                                                if(labels.labelBlocks[labels.currentIndex]->hasDefault==0){
+                                                        std::string stringToAdd = "L";
+                                                        int caseNumer = getCurrentCaseLabel();
+                                                        stringToAdd+=to_string(caseNumer);
+                                                        stringToAdd+=":";
+                                                        appendLineToFile(stringToAdd);
+                                                        labels.labelBlocks[labels.currentIndex]->hasDefault=1;
+                                                }else{
+                                                        appendErrorToFile("Switch can't have more than one default at line "+ to_string(yylineno)); 
                                                 }
                                         }
-        | DEFAULT ':' stmtList          {}
+
+
+        ':' stmtList          {}
         ;
 whileStmt: WHILE '('                                            {    
                                                                         createLabel(labelType::whileLabel);
@@ -471,7 +537,7 @@ whileStmt: WHILE '('                                            {
 
 forStmt:  FOR '('                                               {       
                                                                         createLabel(labelType::forLabel);
-                                                                        printf("Ana Hena");
+                                                                        
                                                                         currentScope = createNewScope();
                                                                         isBracketScope = true;
                                                                          
@@ -566,15 +632,51 @@ loopExpression:
         |  VARIDENTIFIER                {
                                                 $1 = isAvailable(yylval.stringValue);
                                                 if($1==NULL){
-                                        
-                                                        
                                                         std::string temp = yylval.stringValue;
-                                                        appendErrorToFile("Variable"+temp+ " not initialized at line "+ to_string(yylineno));
-                                                        
-                                                        $1->isInitialized = true;
+                                                        appendErrorToFile("Variable"+temp+ " not declared, at line "+ to_string(yylineno));
+          
+                                                }else if($1->entryType != entryTypeEnum::isVariable){
+                                                       std::string temp = yylval.stringValue;
+                                                        appendErrorToFile("Variable"+temp+ " is const, cant be assigned, at line "+ to_string(yylineno));
+                                                }else{
+                                                          $1->isInitialized = true;
                                                 }
                                         }
-        '=' expr ';' expr ';'  expr  
+        '=' expr                        {
+                                                std::string stringToAdd = "pop ";
+                                                stringToAdd += $1->lexeme;
+                                                appendLineToFile(stringToAdd); 
+                                                // stringToAdd = "JMP L";
+                                                // stringToAdd += to_string(labelNumber+1);
+                                                // appendLineToFile(stringToAdd); 
+                                                std::string temp = "L"+to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
+                                                temp+=":";
+                                                appendLineToFile(temp);  
+                                        }
+
+
+        
+        ';' expr                        {
+                
+                                                
+                                                std::string stringToAdd = "JE ";
+                                                stringToAdd +="L"+ to_string( labels.labelBlocks[labels.currentIndex]->labelsNames[2]);
+                                                appendLineToFile(stringToAdd); 
+                                                stringToAdd = "JMP ";
+                                                stringToAdd +="L"+ to_string( labels.labelBlocks[labels.currentIndex]->labelsNames[3]);
+                                                appendLineToFile(stringToAdd); 
+                                                std::string temp = "L"+to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[1]);
+                                                temp+=":";
+                                                appendLineToFile(temp);  
+                                                
+                                        } 
+        
+
+        ';'  expr                       {
+                                                std::string stringToAdd = "JMP ";
+                                                stringToAdd += "L"+to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
+                                                appendLineToFile(stringToAdd);
+                                        }
         ; 
 stmtList:
         stmt                   { }
@@ -585,7 +687,10 @@ expr:
                                                         if($1!=NULL){
                                                                 if($1->dataType != $3->dataType){
                                                                         appendErrorToFile("Type mismatch at line "+ to_string(yylineno));
-                                                                }else{
+                                                                }else if($1->entryType != entryTypeEnum::isVariable){
+                                                                                std::string temp = yylval.stringValue;
+                                                                                appendErrorToFile("Variable"+temp+ " is const, cant be assigned, at line "+ to_string(yylineno));
+                                                                }else {
                                                                         $1->isInitialized = true;
                                                                         std::string stringToAdd = "pop ";
                                                                         stringToAdd += $1->lexeme;
@@ -1304,7 +1409,14 @@ void createLabel(labelType type){
                         labels.labelBlocks[labels.currentIndex]->labelsNames[i] = labelNumber; 
                         labelNumber++;
                 }
-        }else if(type == labelType::ifLabel){
+        }else if(type == labelType::switchLabel){
+                for(int i =0; i< 20;i++){
+                        labels.labelBlocks[labels.currentIndex]->labelsNames[i] = labelNumber; 
+                        labelNumber++;
+                        
+                }
+        }
+        else if(type == labelType::ifLabel){
                 for(int i =0; i< 2;i++){
                         labels.labelBlocks[labels.currentIndex]->labelsNames[i] = labelNumber; 
                         labelNumber++;
@@ -1321,7 +1433,19 @@ void createLabel(labelType type){
                 }
         }
 }
+int getNextCaseLabel(){
+        if(labels.labelBlocks[labels.currentIndex]->type !=  labelType::switchLabel)
+                return -1;
+     
+        return labels.labelBlocks[labels.currentIndex]->labelsNames[++labels.labelBlocks[labels.currentIndex]->currentSwitchLabel];
 
+}
+int getCurrentCaseLabel(){
+        if(labels.labelBlocks[labels.currentIndex]->type !=  labelType::switchLabel)
+                return -1;
+        return labels.labelBlocks[labels.currentIndex]->labelsNames[labels.labelBlocks[labels.currentIndex]->currentSwitchLabel];
+
+}
 void deleteLabel(){
         free(labels.labelBlocks[labels.currentIndex]);
         labels.labelBlocks[labels.currentIndex] = NULL;

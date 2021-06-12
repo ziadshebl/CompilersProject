@@ -1,15 +1,11 @@
-<<<<<<< HEAD
 
 void func Main(){
-  int i =0;
-  do{
-    int y = 0;
-
-  }while(i<0);
-=======
-void func Main()
-{
-  int x = 0;
-  x=1;
->>>>>>> 62cd03f61d73e1375dcc4117c8f64c68a84107c2
+  
+  int y = 0;
+  switch(y){
+    case 0 : 
+      int x = 0;
+    
+  }
+  x++;
 }

@@ -133,7 +133,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 53 "parser.y"
+#line 58 "parser.y"
 
     int iValue;                 /* integer value */
     char sIndex;                /* symbol table index */

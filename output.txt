@@ -1,14 +1,11 @@
 Main:
 push 0
-pop i
-L0: 
-push 0
 pop y
-push i
+push y
+L0:
 push 0
-cmpLT 
-JNZ L0
-L1: 
+cmpEQ 
+JNE L1
+push 0
 pop x
-push 1
-pop x
+L19:
