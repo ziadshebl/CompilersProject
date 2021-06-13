@@ -1,11 +1,7 @@
-
+int func Foo(int x , bool y){
+  int l = 0;
+}
 void func Main(){
   
-  int y = 0;
-  switch(y){
-    case 0 : 
-      int x = 0;
-    
-  }
-  x++;
+  Foo(1,true);
 }

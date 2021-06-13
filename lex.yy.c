@@ -760,157 +760,157 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 21 "lexer.l"
-return INT; 
+return INT; //Integer Data Type
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 22 "lexer.l"
-return STR;
+return STR; //String Data Type
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 23 "lexer.l"
-return BOOL;
+return BOOL; //Boolean Data Type
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 24 "lexer.l"
-return VOID;
+return VOID; //Void Data Type
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 25 "lexer.l"
-return SWITCH;
+return SWITCH; //Switch Keyword
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 26 "lexer.l"
-return CASE;
+return CASE; //Case Keyword
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 27 "lexer.l"
-return DEFAULT;
+return DEFAULT; //Default Keyword in Switch Statement
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 28 "lexer.l"
-return CONST;
+return CONST; //Identifies Constant Variables (Which can not be used as LValue)
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 29 "lexer.l"
-return BREAK;
+return BREAK; //Break Keyword that exits inner-most loop.
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 30 "lexer.l"
-return CONTINUE;
+return CONTINUE; //Continue Keyword just Breaks 1 iteration of the inner-most loop;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 31 "lexer.l"
-return DO;          
+return DO;  //Do Keyword in Do-While Statement          
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 32 "lexer.l"
-return GE;
+return GE;  //Greater than or equal comparator used in boolean expressions
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 33 "lexer.l"
-return LE;
+return LE;  //Less than or equal comparator used in boolean expressions
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 34 "lexer.l"
-return EQ;
+return EQ;  //Equal comparator used in boolean expressions
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 35 "lexer.l"
-return NE;
+return NE;  //Not Equal comparator used in boolean expressions
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 36 "lexer.l"
-return INC;
+return INC; //Increment Operator
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 37 "lexer.l"
-return DEC;
+return DEC; //Decrement Operator
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 38 "lexer.l"
-return INCASSIGNMENT;
+return INCASSIGNMENT; //Add AND assignment operator, It adds right operand to the left operand and assign the result to left operand
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 39 "lexer.l"
-return DECASSIGNMENT;
+return DECASSIGNMENT; //Subtract AND assignment operator, It adds right operand to the left operand and assign the result to left operand.
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 40 "lexer.l"
-return DIVIDEASSIGNMENT;
+return DIVIDEASSIGNMENT; //Divide AND assignment operator, It adds right operand to the left operand and assign the result to left operand.
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 41 "lexer.l"
-return MULTIPLYASSIGNMENT;
+return MULTIPLYASSIGNMENT; //Multiply AND assignment operator, It adds right operand to the left operand and assign the result to left operand.
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 42 "lexer.l"
-return NIL;
+return NIL; //NULL Pointer (not used because project doesn't include Pointers)
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 43 "lexer.l"
-return OR;
+return OR; //Logical operator for disjunction between two boolean expressions
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 44 "lexer.l"
-return AND;
+return AND; //Logical operator for conjunction between two boolean expressions
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 45 "lexer.l"
-return NOT;
+return NOT; //Unary Logical operator for negating a boolean expression
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 46 "lexer.l"
-return FOR;
+return FOR; //For loop Keyword
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 47 "lexer.l"
-return WHILE;
+return WHILE; //While loop Keyword
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 48 "lexer.l"
-return IF;
+return IF; //If Condition Keyword
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 49 "lexer.l"
-return ELSE;
+return ELSE; //Else Keyword in if conditions
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 50 "lexer.l"
-return PRINT;
+return PRINT; //Built-in function
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 51 "lexer.l"
-return FUNCTION;
+return FUNCTION; //Keyword usef before declaring any function identifier
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
@@ -918,7 +918,7 @@ YY_RULE_SETUP
 {       
                     yylval.stringValue = strdup("1");                                                        
                     return TRUEBOOL;
-                }
+                } //Boolean Value for true
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
@@ -926,12 +926,12 @@ YY_RULE_SETUP
 {       
                     yylval.stringValue = strdup("0");                                                        
                      return FALSEBOOL;
-                }
+                } //Boolean Value for false
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 60 "lexer.l"
-return RETURN;
+return RETURN; //Keyword for return from function
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
@@ -939,7 +939,7 @@ YY_RULE_SETUP
 {   
                                                                                 yylval.stringValue = strdup(yytext);
                                                                                 return VARIDENTIFIER;
-                                                                            }
+                                                                            } //Regex for valid variable identifiers (have to start with lowercase)
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
@@ -947,7 +947,7 @@ YY_RULE_SETUP
 {    
                                                                                 yylval.stringValue = strdup(yytext);
                                                                                 return FUNCIDENTIFIER;
-                                                                            }
+                                                                            } //Regex for valid function identifiers (have to start with uppercase)
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
@@ -955,7 +955,7 @@ YY_RULE_SETUP
 {
                                                                                 yylval.stringValue = strdup(yytext);
                                                                                 return INTEGER;
-                                                                            }
+                                                                            } //Regex for valid integer values
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
@@ -964,7 +964,7 @@ YY_RULE_SETUP
                                                                                 yylval.stringValue = strdup(yytext);
                                                                                 return STRING;
                 
-                                                                            }
+                                                                            } //Regex for valid string values
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
@@ -972,7 +972,7 @@ YY_RULE_SETUP
 {   
                 scopeNumber++;
                 return *yytext;
-            }
+            } //Open Scope
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
@@ -980,14 +980,14 @@ YY_RULE_SETUP
 {   
                 scopeNumber--;
                 return *yytext;
-            }            
+            } //Close Scope            
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 92 "lexer.l"
 {
                         return *yytext;
-                    }
+                    } //Arithmetic Operators,Brackets,String Quotes
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
@@ -1003,7 +1003,7 @@ YY_RULE_SETUP
                     char char_array[n+1];
                     strcpy(char_array, notError.c_str());
                     yyerror(char_array);
-            }
+            } //White Space
 	YY_BREAK
 case 44:
 YY_RULE_SETUP

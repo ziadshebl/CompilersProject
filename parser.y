@@ -329,7 +329,7 @@ stmt:
 
 ifStmt: IF '(' expr ')'                         {       
                                                         createLabel(labelType::ifLabel);
-                                                        std::string temp = "JE L";
+                                                        std::string temp = "JNZ L";
                                                         temp+= to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[0]);
                                                         appendLineToFile(temp);
                                                         temp = "JMP L";
@@ -440,8 +440,13 @@ switchStmt:
                                                 
                                         }
          caseStmts closeScope           {
-                                               
+                                                int caseNumer = getCurrentCaseLabel();
+                                
                                                 std::string stringToAdd = "L";
+                                                stringToAdd+=to_string(caseNumer);
+                                                stringToAdd+=":";
+                                                appendLineToFile(stringToAdd);
+                                                stringToAdd = "L";
                                                 stringToAdd+=to_string(labels.labelBlocks[labels.currentIndex]->labelsNames[19]);
                                                 stringToAdd+=":";
                                                 appendLineToFile(stringToAdd);
@@ -473,7 +478,7 @@ caseStmt:
                                                 
                                                 std::string stringToAdd = "cmpEQ ";
                                                 appendLineToFile(stringToAdd);
-                                                stringToAdd = "JNE L";
+                                                stringToAdd = "JZ L";
                                                 stringToAdd+= to_string(nextCaseNumber);
                                                 appendLineToFile(stringToAdd);
                                                 }
@@ -481,10 +486,10 @@ caseStmt:
   
                                       }
                 ':'               {
-                                        currentScope = createNewScope();
+                                       
                                   }       
                 stmtList          {
-                                        currentScope = exitScope(); 
+                                        
                                   }
         | DEFAULT                       {
                                                 if(labels.labelBlocks[labels.currentIndex]->hasDefault==0){
@@ -611,7 +616,7 @@ loopExpression:
                                         }
         ';' expr                        {
                                                 
-                                                std::string stringToAdd = "JE ";
+                                                std::string stringToAdd = "JNZ ";
                                                 stringToAdd +="L"+ to_string( labels.labelBlocks[labels.currentIndex]->labelsNames[2]);
                                                 appendLineToFile(stringToAdd); 
                                                 stringToAdd = "JMP ";
@@ -659,7 +664,7 @@ loopExpression:
         ';' expr                        {
                 
                                                 
-                                                std::string stringToAdd = "JE ";
+                                                std::string stringToAdd = "JNZ ";
                                                 stringToAdd +="L"+ to_string( labels.labelBlocks[labels.currentIndex]->labelsNames[2]);
                                                 appendLineToFile(stringToAdd); 
                                                 stringToAdd = "JMP ";
@@ -1040,6 +1045,9 @@ expr:
                                                                         std::string stringToAdd = "push ";
                                                                         stringToAdd += $1->lexeme;
                                                                         appendLineToFile(stringToAdd); 
+                                                                        stringToAdd = "push ";
+                                                                        stringToAdd += $3->lexeme;
+                                                                        appendLineToFile(stringToAdd); 
                                                                         stringToAdd = "div ";
                                                                         appendLineToFile(stringToAdd);
                                                                         stringToAdd = "pop ";
@@ -1314,7 +1322,7 @@ lValue: VARIDENTIFIER           {
                                         if($1==NULL){
                                                 
                                                 std::string temp = yylval.stringValue;
-                                                appendErrorToFile("Variable "+temp+" at line "+ to_string(yylineno)); 
+                                                appendErrorToFile("Variable "+temp+" not declared in scope at line "+ to_string(yylineno)); 
                                                                         
                                                 $$=NULL;
                                         }else{

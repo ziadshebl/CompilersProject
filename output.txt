@@ -1,11 +1,11 @@
+Foo:
+mov r0 , x
+mov r1 , y
+push 0
+pop l
 Main:
-push 0
-pop y
-push y
-L0:
-push 0
-cmpEQ 
-JNE L1
-push 0
-pop x
-L19:
+push 1
+pop r0
+push 1
+pop r1
+call Foo
