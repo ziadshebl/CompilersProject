@@ -7,6 +7,9 @@ underscore [_]
 %{
 #include <stdlib.h>
 #include <string>
+#include <string.h>
+#include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include "y.tab.h"
 #include <cstring>
@@ -14,6 +17,7 @@ underscore [_]
 extern FILE *yyin;
 extern FILE *yyout;
 void yyerror(char *);
+void appendErrorToFile3(std::string line);
 int scopeNumber = 0;
 %}
 
@@ -107,6 +111,16 @@ int scopeNumber = 0;
 int yywrap(void) {
     return 1;
 }
-void yyerror (char const* s) {
-   fprintf (stderr, "%s\n", s);
- }
+void appendErrorToFile3(std::string line)
+{
+    std::ofstream file;
+    file.open ("./error.txt", std::ios::out | std::ios::app );
+    file << line << std::endl;
+}
+void yyerror(char const*s) {
+    std::string temp=s;
+    temp+=" at line: "+std::to_string(yylineno);
+    appendErrorToFile3(temp);
+    fprintf(stdout, "%s\n", s);
+}
+

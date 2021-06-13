@@ -689,7 +689,8 @@ stmtList:
         ;
 expr:
         lValue '=' expr                         {       
-                                                        if($1!=NULL){
+                                                        printf("Ana hena");
+                                                        if($1!=NULL && $3!=NULL){
                                                                 if($1->dataType != $3->dataType){
                                                                         appendErrorToFile("Type mismatch at line "+ to_string(yylineno));
                                                                 }else if($1->entryType != entryTypeEnum::isVariable){
@@ -708,13 +709,16 @@ expr:
                                                         
                                                 }
         | lValue                                {       
-                                                        if(!$1->isInitialized){
-                                                                std::string temp= $1->lexeme; 
-                                                                appendErrorToFile("Variable"+temp+ " not initialized at line "+ to_string(yylineno));
-                                                        }else{
-                                                                std::string  stringToAdd = "push ";
-                                                                stringToAdd += $1->lexeme;
-                                                                appendLineToFile(stringToAdd); 
+                                                        if($1!=NULL){
+
+                                                                if(!$1->isInitialized){
+                                                                        std::string temp= $1->lexeme; 
+                                                                        appendErrorToFile("Variable"+temp+ " not initialized at line "+ to_string(yylineno));
+                                                                }else{
+                                                                        std::string  stringToAdd = "push ";
+                                                                        stringToAdd += $1->lexeme;
+                                                                        appendLineToFile(stringToAdd); 
+                                                                }
                                                         }
                                                         //notInitialized=false;
                                                         $$=$1;
@@ -1388,6 +1392,9 @@ closeScope: '}'                 {
 %%
 
 void yyerror(char *s) {
+    std::string temp=s;
+    temp+=" at: "+to_string(yylineno);
+    appendErrorToFile(temp);
     fprintf(stdout, "%s\n", s);
 }
 

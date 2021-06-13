@@ -612,11 +612,11 @@ static const yytype_uint16 yyrline[] =
      356,   356,   367,   387,   397,   416,   428,   428,   458,   459,
      462,   470,   488,   462,   494,   494,   510,   520,   510,   543,
      551,   543,   572,   581,   572,   599,   605,   617,   599,   637,
-     650,   664,   637,   687,   688,   691,   710,   722,   726,   741,
-     741,   780,   800,   818,   833,   849,   870,   890,   906,   925,
-     943,   960,   996,  1028,  1062,  1092,  1130,  1168,  1204,  1239,
-    1259,  1279,  1298,  1318,  1320,  1341,  1350,  1358,  1365,  1375,
-    1382
+     650,   664,   637,   687,   688,   691,   711,   726,   730,   745,
+     745,   784,   804,   822,   837,   853,   874,   894,   910,   929,
+     947,   964,  1000,  1032,  1066,  1096,  1134,  1172,  1208,  1243,
+    1263,  1283,  1302,  1322,  1324,  1345,  1354,  1362,  1369,  1379,
+    1386
 };
 #endif
 
@@ -2705,7 +2705,8 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 691 "parser.y"
     {       
-                                                        if((yyvsp[(1) - (3)].entry)!=NULL){
+                                                        printf("Ana hena");
+                                                        if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != (yyvsp[(3) - (3)].entry)->dataType){
                                                                         appendErrorToFile("Type mismatch at line "+ to_string(yylineno));
                                                                 }else if((yyvsp[(1) - (3)].entry)->entryType != entryTypeEnum::isVariable){
@@ -2728,15 +2729,18 @@ yyreduce:
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 710 "parser.y"
+#line 711 "parser.y"
     {       
-                                                        if(!(yyvsp[(1) - (1)].entry)->isInitialized){
-                                                                std::string temp= (yyvsp[(1) - (1)].entry)->lexeme; 
-                                                                appendErrorToFile("Variable"+temp+ " not initialized at line "+ to_string(yylineno));
-                                                        }else{
-                                                                std::string  stringToAdd = "push ";
-                                                                stringToAdd += (yyvsp[(1) - (1)].entry)->lexeme;
-                                                                appendLineToFile(stringToAdd); 
+                                                        if((yyvsp[(1) - (1)].entry)!=NULL){
+
+                                                                if(!(yyvsp[(1) - (1)].entry)->isInitialized){
+                                                                        std::string temp= (yyvsp[(1) - (1)].entry)->lexeme; 
+                                                                        appendErrorToFile("Variable"+temp+ " not initialized at line "+ to_string(yylineno));
+                                                                }else{
+                                                                        std::string  stringToAdd = "push ";
+                                                                        stringToAdd += (yyvsp[(1) - (1)].entry)->lexeme;
+                                                                        appendLineToFile(stringToAdd); 
+                                                                }
                                                         }
                                                         //notInitialized=false;
                                                         (yyval.entry)=(yyvsp[(1) - (1)].entry);
@@ -2746,7 +2750,7 @@ yyreduce:
   case 87:
 
 /* Line 1455 of yacc.c  */
-#line 722 "parser.y"
+#line 726 "parser.y"
     {
                                                         (yyval.entry)=(yyvsp[(1) - (1)].entry);
                                                 }
@@ -2755,7 +2759,7 @@ yyreduce:
   case 88:
 
 /* Line 1455 of yacc.c  */
-#line 726 "parser.y"
+#line 730 "parser.y"
     {
                                                         if((yyvsp[(2) - (2)].entry)!=NULL){
                                                                 if((yyvsp[(2) - (2)].entry)->dataType != dataTypeEnum::typeInt){
@@ -2776,7 +2780,7 @@ yyreduce:
   case 89:
 
 /* Line 1455 of yacc.c  */
-#line 741 "parser.y"
+#line 745 "parser.y"
     { 
 
                                                         (yyvsp[(1) - (1)].entry) = isAvailable(yylval.stringValue);
@@ -2794,7 +2798,7 @@ yyreduce:
   case 90:
 
 /* Line 1455 of yacc.c  */
-#line 753 "parser.y"
+#line 757 "parser.y"
     {
                                                         if((yyvsp[(1) - (5)].entry)->functionsParametersNumber!=argumentListIndex){
                                                                 
@@ -2827,7 +2831,7 @@ yyreduce:
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 780 "parser.y"
+#line 784 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType==dataTypeEnum::typeBool || (yyvsp[(3) - (3)].entry)->dataType==dataTypeEnum::typeBool){
@@ -2853,7 +2857,7 @@ yyreduce:
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 800 "parser.y"
+#line 804 "parser.y"
     {        
                                                         
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
@@ -2877,7 +2881,7 @@ yyreduce:
   case 93:
 
 /* Line 1455 of yacc.c  */
-#line 818 "parser.y"
+#line 822 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != dataTypeEnum:: typeInt || (yyvsp[(3) - (3)].entry)->dataType != dataTypeEnum:: typeInt){
@@ -2898,7 +2902,7 @@ yyreduce:
   case 94:
 
 /* Line 1455 of yacc.c  */
-#line 833 "parser.y"
+#line 837 "parser.y"
     {
                                                          if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != dataTypeEnum:: typeInt || (yyvsp[(3) - (3)].entry)->dataType != dataTypeEnum:: typeInt){
@@ -2920,7 +2924,7 @@ yyreduce:
   case 95:
 
 /* Line 1455 of yacc.c  */
-#line 849 "parser.y"
+#line 853 "parser.y"
     {
                                                          if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != dataTypeEnum:: typeInt || (yyvsp[(3) - (3)].entry)->dataType != dataTypeEnum:: typeInt){
@@ -2947,7 +2951,7 @@ yyreduce:
   case 96:
 
 /* Line 1455 of yacc.c  */
-#line 870 "parser.y"
+#line 874 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != dataTypeEnum:: typeInt || (yyvsp[(3) - (3)].entry)->dataType != dataTypeEnum::typeInt){
@@ -2973,7 +2977,7 @@ yyreduce:
   case 97:
 
 /* Line 1455 of yacc.c  */
-#line 890 "parser.y"
+#line 894 "parser.y"
     {
                                                          if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != dataTypeEnum:: typeInt || (yyvsp[(3) - (3)].entry)->dataType != dataTypeEnum:: typeInt){
@@ -2995,7 +2999,7 @@ yyreduce:
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 906 "parser.y"
+#line 910 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != dataTypeEnum:: typeBool || (yyvsp[(3) - (3)].entry)->dataType != dataTypeEnum:: typeBool){
@@ -3020,7 +3024,7 @@ yyreduce:
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 925 "parser.y"
+#line 929 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != dataTypeEnum:: typeBool || (yyvsp[(3) - (3)].entry)->dataType != dataTypeEnum:: typeBool){
@@ -3044,7 +3048,7 @@ yyreduce:
   case 100:
 
 /* Line 1455 of yacc.c  */
-#line 943 "parser.y"
+#line 947 "parser.y"
     {
                                                         if((yyvsp[(2) - (2)].entry)!=NULL){
                                                                 if((yyvsp[(2) - (2)].entry)->dataType != dataTypeEnum:: typeBool){
@@ -3067,7 +3071,7 @@ yyreduce:
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 960 "parser.y"
+#line 964 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 // if(notInitialized){
@@ -3109,7 +3113,7 @@ yyreduce:
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 996 "parser.y"
+#line 1000 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 // if(notInitialized){
@@ -3147,7 +3151,7 @@ yyreduce:
   case 103:
 
 /* Line 1455 of yacc.c  */
-#line 1028 "parser.y"
+#line 1032 "parser.y"
     {
                                                           if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 // if(notInitialized){
@@ -3187,7 +3191,7 @@ yyreduce:
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 1062 "parser.y"
+#line 1066 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 // if(notInitialized){
@@ -3223,7 +3227,7 @@ yyreduce:
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 1092 "parser.y"
+#line 1096 "parser.y"
     {
                                                         if((yyvsp[(1) - (2)].entry)!=NULL){
                                                                 // if(notInitialized){
@@ -3267,7 +3271,7 @@ yyreduce:
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 1130 "parser.y"
+#line 1134 "parser.y"
     {
                                                         if((yyvsp[(2) - (2)].entry)!=NULL){
                                                                 // if(notInitialized){
@@ -3311,7 +3315,7 @@ yyreduce:
   case 107:
 
 /* Line 1455 of yacc.c  */
-#line 1168 "parser.y"
+#line 1172 "parser.y"
     {
                                                         if((yyvsp[(1) - (2)].entry)!=NULL){
                                                                 // if(notInitialized){
@@ -3353,7 +3357,7 @@ yyreduce:
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 1204 "parser.y"
+#line 1208 "parser.y"
     {
                                                         if((yyvsp[(2) - (2)].entry)!=NULL){
                                                                 // if(notInitialized){
@@ -3394,7 +3398,7 @@ yyreduce:
   case 109:
 
 /* Line 1455 of yacc.c  */
-#line 1239 "parser.y"
+#line 1243 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != dataTypeEnum:: typeInt || (yyvsp[(3) - (3)].entry)->dataType != dataTypeEnum:: typeInt){
@@ -3420,7 +3424,7 @@ yyreduce:
   case 110:
 
 /* Line 1455 of yacc.c  */
-#line 1259 "parser.y"
+#line 1263 "parser.y"
     {      
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != dataTypeEnum:: typeInt || (yyvsp[(3) - (3)].entry)->dataType != dataTypeEnum:: typeInt){
@@ -3446,7 +3450,7 @@ yyreduce:
   case 111:
 
 /* Line 1455 of yacc.c  */
-#line 1279 "parser.y"
+#line 1283 "parser.y"
     {
                                                        if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != (yyvsp[(3) - (3)].entry)->dataType){
@@ -3471,7 +3475,7 @@ yyreduce:
   case 112:
 
 /* Line 1455 of yacc.c  */
-#line 1298 "parser.y"
+#line 1302 "parser.y"
     {
                                                         if((yyvsp[(1) - (3)].entry)!=NULL && (yyvsp[(3) - (3)].entry)!=NULL){
                                                                 if((yyvsp[(1) - (3)].entry)->dataType != (yyvsp[(3) - (3)].entry)->dataType){
@@ -3497,14 +3501,14 @@ yyreduce:
   case 113:
 
 /* Line 1455 of yacc.c  */
-#line 1318 "parser.y"
+#line 1322 "parser.y"
     {(yyval.entry)=(yyvsp[(2) - (3)].entry);}
     break;
 
   case 114:
 
 /* Line 1455 of yacc.c  */
-#line 1320 "parser.y"
+#line 1324 "parser.y"
     {  
                                         (yyvsp[(1) - (1)].entry) = isAvailable(yylval.stringValue);
                                         if((yyvsp[(1) - (1)].entry)==NULL){
@@ -3529,7 +3533,7 @@ yyreduce:
   case 115:
 
 /* Line 1455 of yacc.c  */
-#line 1341 "parser.y"
+#line 1345 "parser.y"
     { 
 
                                         (yyvsp[(1) - (1)].entry) = createEntry(yylval.stringValue, dataTypeEnum::typeInt);
@@ -3544,7 +3548,7 @@ yyreduce:
   case 116:
 
 /* Line 1455 of yacc.c  */
-#line 1350 "parser.y"
+#line 1354 "parser.y"
     {
                                         (yyvsp[(1) - (1)].entry) = createEntry(yylval.stringValue, dataTypeEnum::typeString);
                                         (yyvsp[(1) - (1)].entry)->entryType = entryTypeEnum::isConstant;
@@ -3558,7 +3562,7 @@ yyreduce:
   case 117:
 
 /* Line 1455 of yacc.c  */
-#line 1358 "parser.y"
+#line 1362 "parser.y"
     {
                                         (yyvsp[(1) - (1)].entry) = createEntry(yylval.stringValue, dataTypeEnum::typeBool);
                                         (yyvsp[(1) - (1)].entry)->entryType = entryTypeEnum::isConstant;
@@ -3571,7 +3575,7 @@ yyreduce:
   case 118:
 
 /* Line 1455 of yacc.c  */
-#line 1365 "parser.y"
+#line 1369 "parser.y"
     {
                                         (yyvsp[(1) - (1)].entry) = createEntry(yylval.stringValue, dataTypeEnum::typeBool);
                                         (yyvsp[(1) - (1)].entry)->entryType = entryTypeEnum::isConstant;
@@ -3584,7 +3588,7 @@ yyreduce:
   case 119:
 
 /* Line 1455 of yacc.c  */
-#line 1375 "parser.y"
+#line 1379 "parser.y"
     {
                                        
                                         if(!isBracketScope){
@@ -3597,7 +3601,7 @@ yyreduce:
   case 120:
 
 /* Line 1455 of yacc.c  */
-#line 1382 "parser.y"
+#line 1386 "parser.y"
     {
                                         if(!isClosedBracketScope){
                                              currentScope = exitScope();   
@@ -3609,7 +3613,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 3613 "y.tab.c"
+#line 3617 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -3821,10 +3825,13 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 1388 "parser.y"
+#line 1392 "parser.y"
 
 
 void yyerror(char *s) {
+    std::string temp=s;
+    temp+=" at: "+to_string(yylineno);
+    appendErrorToFile(temp);
     fprintf(stdout, "%s\n", s);
 }
 

@@ -1,7 +1,4 @@
-int func Foo(int x , bool y){
-  int l = 0;
-}
-void func Main(){
-  
-  Foo(1,true);
+void func Main()
+{
+  int 2s = 10;
 }
